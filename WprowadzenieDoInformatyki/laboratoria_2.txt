@@ -1,0 +1,158 @@
+/*
+
+w petli for wszystko
+
+1. Ciąg 5n+4,
+-wypisać sume n- pierwszych elementów ciągu
+-wypisać elementy ciągu od k do n    k<n
+k i n wprowadza użytkownik
+
+2. działanie na wektorach, dwa wktory, [a i b]
+
+x1,x2,x3,y1,y2,y3
+
+wyznaczyć c który jest iloczynem tych wektorów i iloczyn skalarny tych dwóch wektorów
+
+iloczyn skalarny i iloczyn wektorowy
+
+c=axb     a ()b
+
+
+3. schematem hornera wyznaczyć dzielenie wielomianu  a5x^5+a4x^4+a3x^3+a2x^2+a1x+a0
+
+
+
+4.obliczyć pole pod wykresem funkcji (całke),
+pod wykresem funkcji jakiejś dodatniej w formie zlczania prostokątów
+
+funkcje wybieram samodzielnie, ale żeby była w dodatnim zakresie
+
+*/
+
+#include <stdio.h>
+
+int Zadanie1() {
+
+    printf("%s", "\n === ZADANIE 1 === \n");
+
+    int n, k, sum;
+    printf("%s", "Enter k \n");
+    scanf("%d", &k);
+    printf("%s", "Enter n \n ");
+    scanf("%d", &n);
+    for(int i = 1; i <= n; i++) {
+        sum = sum + 5*i + 4;
+        if (i >= k) {
+            printf("%s", "value for ");
+            printf("%d", i);
+            printf("%s", " is equal to ");
+            printf("%d", sum);
+            printf("%s", "\n ");
+        }
+    }
+    return sum;
+}
+
+
+void Zadanie2() {
+
+    int x1, x2, x3, y1, y2, y3, z1, z2, z3;
+    int iloczynSkalarny;
+
+    printf("%s", " \n === ZADANIE 2 === \n");
+
+    printf("%s", "Enter x1 \n ");
+    scanf("%d", &x1);
+    printf("%s", "\n Enter x2 \n");
+    scanf("%d", &x2);
+    printf("%s", "Enter x3 \n ");
+    scanf("%d", &x3);
+    printf("%s", "\n Enter y1 \n");
+    scanf("%d", &y1);
+    printf("%s", "Enter y2 \n ");
+    scanf("%d", &y2);
+    printf("%s", "\n Enter y3 \n");
+    scanf("%d", &y3);
+
+    iloczynSkalarny = x1*y1 + x2*y2 + x3 * y3;
+    z1 = x2*y3 - x3*y2;
+    z2 = x3*y1 - x1*y3;
+    z3 = x1*y2 - x2*y1;
+
+    printf("%s", "\n Wynik iloczynu skalarnego to ");
+    printf("%d", iloczynSkalarny);
+
+    printf("%s", "\n Wynik iloczynu wektorowego to ");
+
+    printf("%s", "\n Wynik iloczynu x1 to ");
+    printf("%d", z1);
+
+    printf("%s", "\n Wynik iloczynu x2 to ");
+    printf("%d", z2);
+
+    printf("%s", "\n Wynik iloczynu x3 to ");
+    printf("%d", z3);
+
+}
+
+
+int Zadanie3() {
+
+    int c, sum;
+    int a[5];
+
+    printf("%s", " \n === ZADANIE 3 === \n");
+
+    printf("%s", "Enter x1 \n ");
+    scanf("%d", &a[0]);
+    printf("%s", "\n Enter x2 \n");
+    scanf("%d", &a[1]);
+    printf("%s", "\n Enter x3 \n ");
+    scanf("%d", &a[2]);
+    printf("%s", "\n Enter x4 \n");
+    scanf("%d", &a[3]);
+    printf("%s", "\n Enter x5 \n ");
+    scanf("%d", &a[4]);
+    printf("%s", "\n Enter x6 \n ");
+    scanf("%d", &a[5]);
+    printf("%s", "\n Enter c \n ");
+    scanf("%d", &c);
+
+    // b0 = a0
+    // bi = b(i-1) * c + ai , i = 1,2,3,...,n
+    // e.kul.pl/files/10382/public/aan_w1_1819_1.pdf
+
+    for(int i = 5; i > 0; i--) {
+        sum = sum*c + a[i-1];
+    }
+    return sum;
+}
+
+
+float Zadanie4() {
+
+    printf("%s", " \n === ZADANIE 4 === \n");
+
+    float startingPoint, endingPoint, function, sum, step = 0.00001;
+
+    printf("%s", "Enter starting point\n ");
+    scanf("%f", &startingPoint);
+    printf("%s", "Enter ending point \n ");
+    scanf("%f", &endingPoint);
+
+    for (float i = startingPoint; i < endingPoint; i = i + step) {
+        function = i; // f(x) = x, x >= 0
+        sum = sum + (function * step);
+    }
+
+    return sum;
+
+}
+
+int main() {
+//   printf("%d", Zadanie1());
+//    Zadanie12();
+//    Zadanie2();
+//   printf("%d", Zadanie3());
+//   printf("%f", Zadanie4());
+}

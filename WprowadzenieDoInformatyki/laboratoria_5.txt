@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct student
+{
+	char name[20];
+	int marks;
+};
+
+void add(struct student *s, int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		printf("Enter the name of student %d: ",i+1);
+		scanf("%s",s[i].name);
+		printf("Enter the marks of student %d: ",i+1);
+		scanf("%d",&s[i].marks);
+	}
+}
+
+void modify(struct student *s, int n)
+{
+    int r;
+    printf("Enter the number of student whose details you want to modify: ");
+    scanf("%d",&r);
+
+    printf("Enter the new name of student %d: ",r+1);
+    scanf("%s",s[r].name);
+    printf("Enter the new marks of student %d: ",r+1);
+    scanf("%d",&s[r].marks);
+
+}
+
+void print(struct student *s, int n)
+{
+	int i;
+	for(i=0;i<n;i++)
+	{
+		printf("Roll number of student %d: %d\n",i+1,s[i].roll);
+		printf("Name of student %d: %s\n",i+1,s[i].name);
+		printf("Marks of student %d: %d\n",i+1,s[i].marks);
+	}
+}
+
+int main()
+{
+	int n;
+	printf("Enter the number of students: ");
+	scanf("%d",&n);
+	struct student *s=(struct student *)malloc(n*sizeof(struct student));
+	add(s,n);
+	modify(s,n);
+	print(s,n);
+	return 0;
+}
