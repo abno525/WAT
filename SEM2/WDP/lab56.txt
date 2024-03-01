@@ -1,0 +1,288 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct element {
+    int x;
+    struct element* next;
+    struct element* prev;
+    struct element* sideList;
+};
+
+// funkcja, która pozwala dodać do listy L element x
+struct element* insert(struct element* head, int data) {
+    struct element *newP = malloc(sizeof(struct element));
+    newP -> sideList = NULL;
+
+    // jeżeli jest pierwszym elementem dodanym,
+    // ustawia siebie jako poprzednika i następnika
+    if (head == NULL) {
+
+        newP -> next = newP;
+        newP -> prev = newP;
+        newP -> x = data;
+        return newP;
+
+    } else {
+        // w innych przypadkach sprawdza czy powinien być poprzednikiem / następnikiem
+        // i dodaje siebie w odpowiednim miejscu, zmieniając informacje elementów go otaczających
+        if (data >= head->x) {
+
+            struct element *temp = malloc(sizeof(struct element));
+            temp = head -> next;
+            newP -> next = temp;
+            newP -> x = data;
+            newP -> prev = head;
+            temp -> prev = newP;
+            head -> next = newP;
+            return newP;
+
+        } else {
+
+            struct element *temp = malloc(sizeof(struct element));
+            temp = head;
+            while (data < temp -> x) {
+                if (temp == head -> next){
+                    newP -> x = data;
+                    newP -> next = temp;
+                    newP -> prev = head;
+                    head -> next = newP;
+                    temp -> prev = newP;
+
+                    return head;
+                }
+                temp = temp -> prev;
+
+            }
+
+            newP -> x = data;
+            newP -> prev = temp;
+            newP -> next = temp->next;
+            temp -> next -> prev = newP;
+            temp -> next = newP;
+            return head;
+
+        }
+    }
+};
+
+//funkcja, która wstawi element tak, aby układ elementów tworzył
+//niemalejący ciąg wartości elementów przechowywanych
+void insertS(struct element* head, int data) {
+
+    struct element *newP = malloc(sizeof(struct element));
+    struct element *temp = head;
+
+    if (head -> next -> x > data) {
+        return;
+    }
+    while (temp -> next -> x <= data) {
+        temp = temp -> next;
+        if (temp == head){
+            break;
+        }
+    }
+
+    newP -> x = data;
+    if (temp -> sideList != NULL) {
+        temp = temp -> sideList;
+        while(temp -> next != NULL) {
+            temp = temp -> next;
+        }
+        temp -> next = newP;
+    }
+    else {
+        temp -> sideList = newP;
+    }
+    newP -> prev = temp;
+    newP -> next = NULL;
+}
+
+void printAllA(struct element* head) {
+    struct element *temp = head -> next;
+    do {
+        printf("\n%d", temp -> prev->x);
+        printf(" <- %d -> ", temp -> x);
+        printf("%d", temp -> next -> x);
+        temp = temp -> next;
+    } while(temp != head -> next);
+}
+
+void printAllOuter(struct element *head);
+
+//funkcja, która pozwala wypisać elementy listy L
+void printAll(struct element* head) {
+    struct element* temp = head -> next;
+    do {
+        printf("%d", temp -> x);
+
+        if (temp -> sideList != NULL) {
+            printAllOuter(temp);
+        }
+
+        printf(" ");
+        temp = temp -> next;
+
+    } while(temp != head -> next);
+}
+
+//funkcja, która wypisuje wszystkie elementy z sideList
+void printAllOuter(struct element *head) {
+    head = head -> sideList;
+    printf(" (");
+    while (head != NULL){
+        printf(" %d", head -> x);
+        head = head -> next;
+    }
+    printf(" )");
+}
+
+
+void printAllOuterDivisible(struct element *head, int divisor);
+
+//funkcja, która pozwala wypisać elementy listy L podzielne przez x
+void printAllDivisible(struct element* head, int divisor) {
+    struct element* temp = head -> next;
+    do {
+
+        if (temp -> x % divisor == 0) {
+            printf("%d ", temp -> x);
+        }
+
+        if (temp -> sideList != NULL) {
+            printAllOuterDivisible(temp, divisor);
+        }
+
+        temp = temp -> next;
+
+    } while(temp != head -> next);
+}
+
+//funkcja, która wypisuje wszystkie elementy z sideList podzielne przez x
+void printAllOuterDivisible(struct element *head, int divisor) {
+    head = head -> sideList;
+    printf(" (");
+    while (head != NULL){
+
+        if (head -> x % divisor == 0) {
+            printf("%d ", head -> x);
+        }
+
+        head = head -> next;
+    }
+    printf(" )");
+}
+
+void valueDeleter(struct element* head, int valueDeleted);
+
+void delElm(struct element* head, int valueDeleted) {
+    struct element* temp = head -> next;
+    do {
+        printf("%d", temp -> x);
+
+        if (temp -> sideList != NULL) {
+            valueDeleter(temp, valueDeleted);
+        }
+
+        printf(" ");
+        temp = temp -> next;
+
+    } while(temp != head -> next);
+}
+
+void valueDeleter(struct element *head, int valueDeleted) {
+    head = head -> sideList;
+    struct element* temp;
+    printf(" (");
+
+    for(int i = 0; head != NULL; ++i) {
+
+        temp = head -> next;
+
+        if (head -> x == valueDeleted) {
+            if (i == 0) {
+                head -> prev -> sideList = head -> next;
+                head -> next -> prev = head -> sideList;
+            } else {
+                head->prev->next = head->next;
+                head->next->prev = head->prev;
+            }
+
+            free(head);
+        }
+
+        head = temp;
+    }
+    printf(" )");
+}
+
+void deleteAllOuter(struct element *head);
+
+// funkcja, która pozwala usunąć listę z pamięci
+void delList(struct element* head) {
+    struct element* temp = head -> next;
+    struct element *temptemp;
+
+    do {
+
+        if (temp -> sideList != NULL) {
+            deleteAllOuter(temp);
+        }
+
+         temptemp = temp -> next;
+         free(temp);
+         temp = temptemp;
+
+    } while(temp != head -> next);
+}
+
+void deleteAllOuter(struct element *head) {
+
+    head = head -> sideList;
+    struct element *temp;
+
+    while (head != NULL){
+
+        temp = head -> next;
+        free(head );
+        head = temp;
+
+    }
+}
+
+int main() {
+
+    // cyfry w środkowym kole
+    int k = 4;
+
+    // cyfry na obrzeżach
+    int n = 20;
+
+    struct element* head = NULL;
+
+    // wypełniamy środkowe koło
+    for (int i = 0; i < k; i++) {
+        int r =1 + rand() % 100;
+        head = insert(head, r);
+    }
+
+    // wypełniamy obrzeża
+    for (int i = 0; i < (n-k); i++) {
+        int r = 1 + rand() % 100;
+        insertS(head, r);
+    }
+
+    printf("\n Wyświetlanie wszystkich wartości: \n");
+    printAll(head);
+    printf("\n Wyświetlanie wartości w środkowym kole: \n");
+    printAllA(head);
+    printf("\n Wyświetlanie wszystkich wartości podzielnych przez 2: \n");
+    printAllOuterDivisible(head, 2);
+    printf("\n Usuwanie wszystkiego: \n");
+    delList(head);
+    printf("\n");
+    printAllA(head);
+    printAll(head);
+
+    return 0;
+};
+

@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+
+
+int zadanie3() {
+
+    int n, sum;
+
+    printf("%s", "=== ZADANIE 3 === ");
+    printf("%s", "Enter n number \n");
+    scanf("%d", &n);
+
+    for(int k = 1; k <= ((n + 1) / 2); k++) {
+        sum += combination((n - k), k - 1);
+    }
+
+    return sum;
+}
+
+long factorial(int number) {
+    int factorial = 1;
+
+    for(int i = 1; i <= number; i++)
+    {
+        factorial *= i;
+    }
+    return factorial;
+}
+
+long permutation(int n, int r) {
+    return factorial(n) / factorial(n-r);
+}
+
+long combination(int n, int r) {
+    return permutation(n, r) / factorial(r);
+}
+
+int main() {
+    printf("%d", zadanie3());
+}
+

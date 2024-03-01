@@ -1,0 +1,185 @@
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+const char *timie[] = {"Adam", "Tomasz", "Agnieszka", "Jacek", NULL};
+const char *tnazwisko[] = {"Kowalski", "Tomaszewski", "Adamowski", "Jackowski", NULL};
+double t_ocn[] = {1, 2, 3, 4, 5, 6}; //6
+
+struct Element_t {
+    float element;
+    struct Element_t * next;
+};
+
+struct Osoba {
+    char *imie;
+    char *nazwisko;
+    struct Element_t *oceny;
+    int liczbaOcen;
+};
+
+void init_lst(struct Element_t **s){
+    *s = NULL;
+}
+
+void push(struct Element_t **s, float x){
+    struct Element_t *nowy=(struct Element_t *) malloc (sizeof(struct Element_t));
+
+    if (!*s){
+        nowy->next = NULL;
+        nowy->element = x;
+        *s = nowy ;
+    } else {
+        struct Element_t *tmp;
+        tmp = *s;
+        nowy->next = *s;
+        nowy->element = x;
+        *s=nowy;
+    }
+}
+
+void print_all(struct Element_t **s){
+    if(!*s){
+        printf("\n Lista pusta\n");
+        return;
+    }
+    struct Element_t *robo= *s;
+    while(robo){
+        printf("%.1f,",robo->element);
+        robo=(robo->next);
+    }
+    printf("\n");
+}
+
+void del_lst(struct Element_t **s){
+    struct Element_t *tmp=*s,*next;
+    while (tmp!=NULL){
+        next =tmp->next;
+        free(tmp);
+        tmp = next;
+    }
+}
+
+void filler_base(struct Osoba *baza, int n) {
+    int dli, dln, ocn = 0;
+
+    for(dli=0; timie[dli]; dli++);
+    for(dln=0; tnazwisko[dln]; dln++);
+    for(ocn=0; t_ocn[ocn]; ocn++);
+
+    for (int i = 0; i < n; i++) {
+        baza[i].imie = timie[rand()% dli];
+        baza[i].nazwisko = tnazwisko[rand()% dln];
+        baza[i].oceny = malloc(sizeof(struct Element_t));
+
+        for (int j = 0; j < 10; j++) {
+            push((struct Element_t **) baza[i].oceny, t_ocn[rand() % 6]);
+        }
+    }
+}
+
+void print_base(struct Osoba *baza, int n);
+
+void gradeDeleter(struct Osoba *baza, int nr_osoby, int nr_oceny, int n);
+
+void gradeAdder(struct Osoba *baza, int n, int nr_osoby, int nr_oceny);
+
+void menu (struct Osoba *baza, int n) {
+
+    int nr_osoby, nr_oceny, input;
+
+    printf("Opcje programu: \n 0: wyjdz \n 1: dodaj ocene \n 2: usun ocene \n 3: wyswietl oceny \n");
+    scanf("%d", &input);
+
+    switch(input) {
+        case 0:
+
+            for (int i = 0; i < n; i++) {
+                del_lst((struct Element_t **) baza[i].oceny);
+            }
+            free(baza);
+
+            printf("Pamiec wyczyszczona. Dowidzenia. \n");
+            return;
+
+        case 1:
+
+            printf("Ktora osoba?");
+            scanf("%d", &nr_osoby);
+            printf("Ktora ocena?");
+            scanf("%d", &nr_oceny);
+            gradeAdder(baza, n, nr_osoby - 1, nr_oceny);
+            break;
+
+        case 2:
+
+            printf("Ktora osoba?");
+            scanf("%d", &nr_osoby);
+            printf("Ktora ocena? \n (podaj wartosc usuwanej oceny, nie pozycje) \n ");
+            scanf("%d", &nr_oceny);
+            gradeDeleter(baza, n, nr_osoby - 1, nr_oceny);
+            break;
+
+        case 3:
+
+            print_base(baza, n);
+            break;
+
+        default:
+
+            printf("Zly input \n");
+            menu(baza, n);
+    }
+}
+
+void gradeAdder(struct Osoba *baza, int n, int nr_osoby, int nr_oceny) {
+    push((struct Element_t **) baza[nr_osoby].oceny, nr_oceny);
+    menu(baza, n);
+}
+
+void gradeDeleter(struct Osoba *baza, int n, int nr_osoby, int nr_oceny) {
+
+    bool found = false;
+    int i = 0;
+
+    while(!found) {
+        if( baza[nr_osoby].oceny[i].element == nr_oceny) {
+
+            baza[nr_osoby].oceny[i-1].next = &baza[nr_osoby].oceny[i+1];
+
+            // free(baza[nr_osoby].oceny[i]);
+            found = true;
+
+        } else {
+            i++;
+        }
+    }
+    menu(baza, n);
+}
+
+void print_base(struct Osoba *baza, int n) {
+
+    for (int i = 0; i < n; i++) {
+        printf("%s %s ", baza[i].imie, baza[i].nazwisko);
+        print_all((struct Element_t **) baza[i].oceny);
+        printf("\n");
+    }
+
+    menu(baza, n);
+}
+
+int main(void) {
+
+    int input;
+
+    printf("BAZA DANYCH STUDENTOW \n Ile osob dodac do bazy? ");
+    scanf("%d", &input);
+
+    struct Osoba *baza = (struct Osoba *) malloc (input * sizeof (struct Osoba));
+    filler_base(baza, input);
+
+    menu(baza, input);
+
+    return 0;
+}

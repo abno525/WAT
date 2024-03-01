@@ -1,0 +1,205 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+typedef struct {
+    int value;
+    int priority;
+} Element;
+
+typedef struct {
+    Element buffer[MAX_SIZE];
+    int size;
+    int front;
+    int rear;
+} Queue;
+
+// Funkcja inicjalizująca kolejkę
+void initQueue(Queue* Q) {
+    Q->size = 0;
+    Q->front = 0;
+    Q->rear = -1;
+}
+
+// Funkcja sprawdzająca, czy kolejka jest pusta
+bool isEmpty(Queue* Q) {
+    return Q->size == 0;
+}
+
+// Funkcja sprawdzająca, czy kolejka jest pełna
+bool isFull(Queue* Q) {
+    return Q->size == MAX_SIZE;
+}
+
+// Funkcja dodająca element do kolejki
+void pushQ(Queue* Q, int value, int priority) {
+    if (isFull(Q)) {
+        printf("Kolejka jest pełna.\n");
+        return;
+    }
+
+    // Znajdź kolejkę z najmniejszą liczbą elementów
+    int minQueueIndex = 0;
+    int minQueueSize = Q[0].size;
+
+    for (int i = 1; i < 3; i++) {
+        if (Q[i].size < minQueueSize) {
+            minQueueIndex = i;
+            minQueueSize = Q[i].size;
+        }
+    }
+
+    // Dodaj element do wybranej kolejki
+    Element newItem;
+    newItem.value = value;
+    newItem.priority = priority;
+
+
+    Q[minQueueIndex].rear = (Q[minQueueIndex].rear + 1) % MAX_SIZE;
+    Q[minQueueIndex].buffer[Q[minQueueIndex].rear] = newItem;
+    Q[minQueueIndex].size++;
+}
+
+// Funkcja usuwająca element z kolejki
+void popQ(Queue* Q, int queueIndex) {
+    if (isEmpty(&Q[queueIndex])) {
+        printf("Kolejka %d jest pusta. Nie można usunąć elementu.\n", queueIndex + 1);
+        return;
+
+    }
+
+    // Usuń element z wybranej kolejki
+    Element removedItem = Q[queueIndex].buffer[Q[queueIndex].front];
+    Q[queueIndex].front = (Q[queueIndex].front + 1) % MAX_SIZE;
+    Q[queueIndex].size--;
+
+
+    printf("Usunięty element: Wartość=%d, Priorytet=%d, Kolejka=%d\n",
+           removedItem.value, removedItem.priority, queueIndex + 1);
+}
+
+// Funkcja sprawdzająca, czy bufor kolejki jest zapełniony do swojej pojemności
+void checkQ(Queue* Q) {
+    int totalSize = Q[0].size + Q[1].size + Q[2].size;
+    int capacity = 3 * MAX_SIZE;
+
+    if (totalSize == capacity)
+        printf("Bufor kolejki jest pełny.\n");
+    else if (totalSize <= capacity / 3)
+        printf("Bufor kolejki jest 1/3 pełny.\n");
+    else if (totalSize <= capacity * 2 / 3)
+        printf("Bufor kolejki jest 2/3 pełny.\n");
+    else
+        printf("Bufor kolejki nie jest pełny.\n");
+
+}
+
+// Funkcja wyświetlająca zawartość kolejki
+void printQ(Queue* Q) {
+
+    printf("Kolejka 1: ");
+    for (int i = Q[0].front; i <= Q[0].rear; i++)
+        printf("(%d, %d) ", Q[0].buffer[i].value, Q[0].buffer[i].priority);
+    printf("\n");
+
+    printf("Kolejka 2: ");
+    for (int i = Q[1].front; i <= Q[1].rear; i++)
+        printf("(%d, %d) ", Q[1].buffer[i].value, Q[1].buffer[i].priority);
+    printf("\n");
+
+    printf("Kolejka 3: ");
+    for (int i = Q[2].front; i <= Q[2].rear; i++)
+        printf("(%d, %d) ", Q[2].buffer[i].value, Q[2].buffer[i].priority);
+    printf("\n");
+
+}
+
+// Funkcja wyświetlająca stan kolejki (Pusta, Pełna, 1/3 pełna, 2/3 pełna)
+void signQ(Queue* Q) {
+
+    if (isEmpty(Q))
+        printf("Kolejka jest pusta.\n");
+    else if (isFull(Q))
+        printf("Kolejka jest pełna.\n");
+    else
+        checkQ(Q);
+
+}
+
+// Funkcja usuwająca kolejkę z pamięci
+void delQ(Queue* Q) {
+
+    for (int i = 0; i < 3; i++)
+        initQueue(&Q[i]);
+    printf("Kolejki zostały usunięte.\n");
+}
+
+// Funkcja czyści zawartość kolejki
+void flushQ(Queue* Q) {
+    for (int i = 0; i < 3; i++)
+        initQueue(&Q[i]);
+    printf("Zawartość kolejki została wyczyszczona.\n");
+}
+
+int main() {
+    Queue queues[3];
+    int choice;
+    int value, priority;
+    int indexOfQueue, p;
+
+    for (int i = 0; i < 3; i++)
+        initQueue(&queues[i]);
+
+    while (true) {
+
+        printf("\nMenu:\n");
+        printf("1. Dodaj element do kolejek\n");
+        printf("2. Usuń element z kolejki\n");
+        printf("3. Wyświetl kolejki\n");
+        printf("4. Sprawdź stan kolejki\n");
+        printf("5. Usuń kolejki\n");
+        printf("6. Wyczyść zawartość kolejki\n");
+        printf("7. Wyjście\n");
+        printf("Wybierz opcję: ");
+
+        scanf("%d", &choice);
+
+
+
+        switch (choice) {
+            case 1:
+                printf("Podaj wartość: ");
+                scanf("%d", &value);
+                printf("Podaj priorytet kolejki (1 - najwyższy): ");
+                scanf("%d", &priority);
+                pushQ(queues, value, priority);
+                break;
+            case 2:
+                printf("Podaj indeks kolejki (1, 2 lub 3): ");
+                scanf("%d", &indexOfQueue);
+                if (indexOfQueue < 1 || indexOfQueue > 3) {
+                    printf("Błędny indeks kolejki. Spróbuj ponownie.\n");
+                    break;
+                }
+                popQ(queues, indexOfQueue - 1);
+                break;
+            case 3:
+                printQ(queues);
+                break;
+            case 4:
+                signQ(queues);
+                break;
+            case 5:
+                delQ(queues);
+                break;
+            case 6:
+                flushQ(queues);
+                break;
+            case 7:
+                return 0;
+            default:
+                printf("Brak takiej opcji.\n");
+        }
+    }
+}
