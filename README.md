@@ -5,4 +5,4 @@ Zajęcia grupy WCY22KY2S1.
 
 
 
-**Pliki były używane do nauki własnej i mogą mieć błędy**
+**Pliki były używane do nauki własnej i mogą mieć (a nawet mają) błędy**
