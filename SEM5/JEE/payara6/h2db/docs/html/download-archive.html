@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Copyright 2004-2023 H2 Group. Multiple-Licensed under the MPL 2.0,
+and the EPL 1.0 (https://h2database.com/html/license.html).
+Initial Developer: H2 Group
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+Archive Downloads
+</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<!-- [search] { -->
+<script type="text/javascript" src="navigation.js"></script>
+</head><body onload="highlight()" onscroll="scroll()">
+
+<table class="nav" onmousemove="return mouseMove(event)"><tr class="nav"><td class="nav" valign="top">
+<div id = "searchMenu" style="width: 180px; overflow: hidden;">
+<div class="menu" style="white-space:nowrap;">
+<img src="images/h2-logo-2.png"
+    alt="H2 database logo"
+    onclick="document.location='main.html'"
+    width="136" height="74"/>
+&nbsp;&nbsp;<span id = "goTop" onclick="window.scrollTo(0,0)" style="color: #fff; position:fixed; font-size: 20px; cursor: pointer;">&#x25b2;</span>
+</div>
+
+<form action="submit" onsubmit="return goFirst();">
+<table width="100%" class="search">
+    <tr class="search">
+        <td class="search" colspan="2">
+<!-- translate
+<a href="https://translate.google.com/translate?u=https%3A%2F%2Fh2database.com"
+    onclick="javascript:startTranslate();return false;">Translate</a>
+<div id = "translate" style="display:none"><div id = "google_translate_element"></div></div>
+translate -->
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+        <b><label for="search">Search:</label></b>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <input id = "search" name="search" type="text" size="16" maxlength="100" onkeyup="listWords(this.value, '')" /><br />
+            <input type="reset" id = "clear" style="display:none;" value="Clear" onclick="listWords('', '');" />
+        </td>
+    </tr>
+    <tr class="search" style="display:none;" >
+        <td class="search" style="width: 1%; vertical-align: middle;">
+            <input id = "highlight" type="checkbox" checked="checked" onclick="highlightCurrent(this.checked, search.value)" />
+        </td>
+        <td class="search" style="width: 99%; padding: 0px; vertical-align: middle;">
+            <label for="highlight">Highlight keyword(s)</label>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <table id = "result" style="border: 0px;">
+                <tr style="display:none"><td></td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</form>
+<div class="menu">
+<b><a href="main.html">Home</a></b><br />
+<a href="download.html">Download</a><br />
+<a href="cheatSheet.html">Cheat Sheet</a><br />
+<br />
+<b>Documentation</b><br />
+<a href="quickstart.html">Quickstart</a><br />
+<a href="installation.html">Installation</a><br />
+<a href="tutorial.html">Tutorial</a><br />
+<a href="features.html">Features</a><br />
+<a href="security.html">Security</a><br />
+<a href="performance.html">Performance</a><br />
+<a href="advanced.html">Advanced</a><br />
+<br />
+<b>Reference</b><br />
+<a href="commands.html">Commands</a><br />
+<a href="functions.html">Functions</a><br />
+&#8226;&nbsp;<a href="functions-aggregate.html">Aggregate</a>
+&#8226;&nbsp;<a href="functions-window.html">Window</a>
+<br /><br />
+<a href="datatypes.html">Data Types</a><br />
+<a href="grammar.html">SQL Grammar</a><br />
+<a href="systemtables.html">System Tables</a><br />
+<a href="../javadoc/index.html">Javadoc</a><br />
+<a href="https://github.com/h2database/h2database/releases/download/version-2.2.224/h2.pdf">PDF (2 MB)</a><br />
+<br />
+<b>Support</b><br />
+<a href="faq.html">FAQ</a><br />
+<a href="sourceError.html">Error Analyzer</a><br />
+<a href="https://groups.google.com/g/h2-database">Google Group</a><br />
+<br />
+<b>Appendix</b><br />
+<a href="history.html">History</a><br />
+<a href="license.html">License</a><br />
+<a href="build.html">Build</a><br />
+<a href="links.html">Links</a><br />
+<a href="mvstore.html">MVStore</a><br />
+<a href="architecture.html">Architecture</a><br />
+<a href="migration-to-v2.html">Migration to 2.0</a><br />
+<br />
+
+</div>
+</div>
+</td>
+
+<td class="nav" style="cursor: e-resize;" onmousedown="return mouseDown(event)" onmouseup="return mouseUp(event)">&nbsp;</td>
+<td class="nav"><div class="content">
+
+<!-- } -->
+
+<h1>Archive Downloads</h1>
+
+<h2>Maven Central</h2>
+
+<p><a href="https://search.maven.org/search?q=g:com.h2database%20AND%20a:h2&core=gav">H2 database</a></p>
+<p><a href="https://search.maven.org/search?q=g:com.h2database%20AND%20a:h2-mvstore&core=gav">MVStore</a></p>
+
+<h2>Distribution</h2>
+
+<table>
+<tbody>
+<tr><td>2.2.222</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.2.222/h2-setup-2023-08-22.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.2.222/h2-2023-08-22.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.2.220</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.2.220/h2-setup-2023-07-04.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.2.220/h2-2023-07-04.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.1.214</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.1.214/h2-setup-2022-06-13.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.1.214/h2-2022-06-13.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.1.212</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.1.212/h2-setup-2022-04-09.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.1.212/h2-2022-04-09.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.1.210</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.1.210/h2-setup-2022-01-16.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.1.210/h2-2022-01-16.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.0.206</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.0.206/h2-setup-2022-01-04.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.0.206/h2-2022-01-04.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.0.204</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.0.204/h2-setup-2021-12-21.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.0.204/h2-2021-12-21.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>2.0.202</td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.0.202/h2-setup-2021-11-25.exe">Windows Installer</a></td>
+<td><a href="https://github.com/h2database/h2database/releases/download/version-2.0.202/h2-2021-11-25.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.200</td>
+<td><a href="https://h2database.com/h2-setup-2019-10-14.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2019-10-14.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.199</td>
+<td><a href="https://h2database.com/h2-setup-2019-03-13.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2019-03-13.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.198</td>
+<td><a href="https://h2database.com/h2-setup-2019-02-22.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2019-02-22.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.197</td>
+<td><a href="https://h2database.com/h2-setup-2018-03-18.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2018-03-18.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.196</td>
+<td><a href="https://h2database.com/h2-setup-2017-06-10.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2017-06-10.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.195</td>
+<td><a href="https://h2database.com/h2-setup-2017-04-23.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2017-04-23.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.194</td>
+<td><a href="https://h2database.com/h2-setup-2017-03-10.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2017-03-10.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.193</td>
+<td><a href="https://h2database.com/h2-setup-2016-10-31.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2016-10-31.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.192</td>
+<td><a href="https://h2database.com/h2-setup-2016-05-26.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2016-05-26.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.191</td>
+<td><a href="https://h2database.com/h2-setup-2016-01-21.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2016-01-21.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.190</td>
+<td><a href="https://h2database.com/h2-setup-2015-10-11.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2015-10-11.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.189</td>
+<td><a href="https://h2database.com/h2-setup-2015-09-13.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2015-09-13.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.188</td>
+<td><a href="https://h2database.com/h2-setup-2015-08-01.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2015-08-01.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.187</td>
+<td><a href="https://h2database.com/h2-setup-2015-04-10.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2015-04-10.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.186</td>
+<td><a href="https://h2database.com/h2-setup-2015-03-02.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2015-03-02.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.185</td>
+<td><a href="https://h2database.com/h2-setup-2015-01-16.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2015-01-16.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.184</td>
+<td><a href="https://h2database.com/h2-setup-2014-12-19.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-12-19.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.183</td>
+<td><a href="https://h2database.com/h2-setup-2014-12-13.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-12-13.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.182</td>
+<td><a href="https://h2database.com/h2-setup-2014-10-17.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-10-17.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.181</td>
+<td><a href="https://h2database.com/h2-setup-2014-08-06.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-08-06.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.180</td>
+<td><a href="https://h2database.com/h2-setup-2014-07-13.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-07-13.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.179</td>
+<td><a href="https://h2database.com/h2-setup-2014-06-23.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-06-23.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.178</td>
+<td><a href="https://h2database.com/h2-setup-2014-05-02.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-05-02.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.177</td>
+<td><a href="https://h2database.com/h2-setup-2014-04-12.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-04-12.zip">Platform-Independent Zip</a></td>
+</tr>
+<tr><td>1.4.176</td>
+<td><a href="https://h2database.com/h2-setup-2014-04-05.exe">Windows Installer</a></td>
+<td><a href="https://h2database.com/h2-2014-04-05.zip">Platform-Independent Zip</a></td>
+</tr>
+</tbody>
+</table>
+
+<h2>Older releases</h2>
+<p>
+<a href="https://code.google.com/archive/p/h2database/downloads">Platform-Independent Zip</a><br />
+</p>
+
+<!-- [close] { -->
+</div></td></tr></table>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="search.js"></script>
+<script type="text/javascript">
+function startTranslate() {
+    document.getElementById('translate').style.display='';
+    var script=document.createElement('script');
+    script.setAttribute("type","text/javascript");
+    script.setAttribute("src", "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit");
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+<!-- } --><!-- analytics --></body></html>
+

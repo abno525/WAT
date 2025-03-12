@@ -1,0 +1,6 @@
+2024-11-23 23:30:42.440327+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CARDS" not found (this database is empty); SQL statement:
+SELECT 1 FROM Cards [42104-232]
+2024-11-23 23:30:42.449712+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SEQUENCE" not found; SQL statement:
+SELECT 1 FROM SEQUENCE [42102-232]

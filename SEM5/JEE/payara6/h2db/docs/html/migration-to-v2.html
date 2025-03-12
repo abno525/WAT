@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Copyright 2004-2023 H2 Group. Multiple-Licensed under the MPL 2.0,
+and the EPL 1.0 (https://h2database.com/html/license.html).
+Initial Developer: H2 Group
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+Migration to 2.0
+</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<!-- [search] { -->
+<script type="text/javascript" src="navigation.js"></script>
+</head><body onload="highlight()" onscroll="scroll()">
+
+<table class="nav" onmousemove="return mouseMove(event)"><tr class="nav"><td class="nav" valign="top">
+<div id = "searchMenu" style="width: 180px; overflow: hidden;">
+<div class="menu" style="white-space:nowrap;">
+<img src="images/h2-logo-2.png"
+    alt="H2 database logo"
+    onclick="document.location='main.html'"
+    width="136" height="74"/>
+&nbsp;&nbsp;<span id = "goTop" onclick="window.scrollTo(0,0)" style="color: #fff; position:fixed; font-size: 20px; cursor: pointer;">&#x25b2;</span>
+</div>
+
+<form action="submit" onsubmit="return goFirst();">
+<table width="100%" class="search">
+    <tr class="search">
+        <td class="search" colspan="2">
+<!-- translate
+<a href="https://translate.google.com/translate?u=https%3A%2F%2Fh2database.com"
+    onclick="javascript:startTranslate();return false;">Translate</a>
+<div id = "translate" style="display:none"><div id = "google_translate_element"></div></div>
+translate -->
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+        <b><label for="search">Search:</label></b>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <input id = "search" name="search" type="text" size="16" maxlength="100" onkeyup="listWords(this.value, '')" /><br />
+            <input type="reset" id = "clear" style="display:none;" value="Clear" onclick="listWords('', '');" />
+        </td>
+    </tr>
+    <tr class="search" style="display:none;" >
+        <td class="search" style="width: 1%; vertical-align: middle;">
+            <input id = "highlight" type="checkbox" checked="checked" onclick="highlightCurrent(this.checked, search.value)" />
+        </td>
+        <td class="search" style="width: 99%; padding: 0px; vertical-align: middle;">
+            <label for="highlight">Highlight keyword(s)</label>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <table id = "result" style="border: 0px;">
+                <tr style="display:none"><td></td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</form>
+<div class="menu">
+<b><a href="main.html">Home</a></b><br />
+<a href="download.html">Download</a><br />
+<a href="cheatSheet.html">Cheat Sheet</a><br />
+<br />
+<b>Documentation</b><br />
+<a href="quickstart.html">Quickstart</a><br />
+<a href="installation.html">Installation</a><br />
+<a href="tutorial.html">Tutorial</a><br />
+<a href="features.html">Features</a><br />
+<a href="security.html">Security</a><br />
+<a href="performance.html">Performance</a><br />
+<a href="advanced.html">Advanced</a><br />
+<br />
+<b>Reference</b><br />
+<a href="commands.html">Commands</a><br />
+<a href="functions.html">Functions</a><br />
+&#8226;&nbsp;<a href="functions-aggregate.html">Aggregate</a>
+&#8226;&nbsp;<a href="functions-window.html">Window</a>
+<br /><br />
+<a href="datatypes.html">Data Types</a><br />
+<a href="grammar.html">SQL Grammar</a><br />
+<a href="systemtables.html">System Tables</a><br />
+<a href="../javadoc/index.html">Javadoc</a><br />
+<a href="https://github.com/h2database/h2database/releases/download/version-2.2.224/h2.pdf">PDF (2 MB)</a><br />
+<br />
+<b>Support</b><br />
+<a href="faq.html">FAQ</a><br />
+<a href="sourceError.html">Error Analyzer</a><br />
+<a href="https://groups.google.com/g/h2-database">Google Group</a><br />
+<br />
+<b>Appendix</b><br />
+<a href="history.html">History</a><br />
+<a href="license.html">License</a><br />
+<a href="build.html">Build</a><br />
+<a href="links.html">Links</a><br />
+<a href="mvstore.html">MVStore</a><br />
+<a href="architecture.html">Architecture</a><br />
+<a href="migration-to-v2.html">Migration to 2.0</a><br />
+<br />
+
+</div>
+</div>
+</td>
+
+<td class="nav" style="cursor: e-resize;" onmousedown="return mouseDown(event)" onmouseup="return mouseUp(event)">&nbsp;</td>
+<td class="nav"><div class="content">
+
+<!-- } -->
+
+<h1>Contents</h1>
+<a href="#intro">
+    Introduction</a><br />
+<a href="#upgrade">
+    Upgrading</a><br />
+<a href="#format">
+    File Format</a><br />
+<a href="#data_types">
+    Data types</a><br />
+<a href="#identity_columns_and_sequences">
+    Identity columns and sequences</a><br />
+<a href="#information_schema">
+    INFORMATION_SCHEMA</a><br />
+<a href="#general">
+    General</a><br />
+
+<h2 id="intro">Introduction</h2>
+
+<p>
+Between version 1.4.200 and version 2.0.202 there have been considerable changes, such that a simple update is
+not possible.
+</p>
+
+<p>
+It would have been nice to write some kind of migration tool, or auto-detect the file and upgrade. Unfortunately, this
+is purely a volunteer-run project, so this is just the way it has to be. There exists a migration tool <a
+href="https://github.com/manticore-projects/H2MigrationTool">H2MigrationTool</a> available
+in GitHub, but it hasn't been tested by our team. Use at
+your own risk.
+</p>
+
+<h2 id="upgrade">Upgrading</h2>
+
+<p>
+The official way to upgrade is to export it into SQL script with the
+<a href="https://h2database.com/html/commands.html#script">SCRIPT</a> command
+<span style="font-weight: bold">USING YOUR CURRENT VERSION OF H2.</span>
+</p>
+
+<p>
+Then create a fresh database <span style="font-weight: bold">USING THE NEW VERSION OF H2</span>, then perform a
+<a href="https://h2database.com/html/commands.html#runscript">RUNSCRIPT</a> to load your data.
+You may need to specify FROM_1X flag, see documentation of this command for details.
+</p>
+
+<h2 id="format">MVStore file format</h2>
+
+<p>
+The MVStore file format we use (i.e. the default) is still mostly the same, but some subtle changes have been made
+to the undo logs,
+for the purposes of improving crash safety and also read/write performance.
+</p>
+
+<h2 id="data_types">Data types</h2>
+
+<p>
+The maximum length of <a href="https://h2database.com/html/datatypes.html#character_type">CHARACTER</a>
+and <a href="https://h2database.com/html/datatypes.html#character_varying_type">CHARACTER VARYING</a> data types
+is 1_000_000_000 characters. For larger values use
+<a href="https://h2database.com/html/datatypes.html#character_large_object_type">CHARACTER LARGE OBJECT</a>.
+</p>
+
+<p>
+<a href="https://h2database.com/html/datatypes.html#binary_type">BINARY</a>
+and <a href="https://h2database.com/html/datatypes.html#binary_varying_type">BINARY VARYING</a>
+are now different data types. BINARY means fixed-length data type and its default length is 1.
+The maximum length of binary strings is 1_000_000_000 bytes. For larger values use
+<a href="https://h2database.com/html/datatypes.html#binary_large_object_type">BINARY LARGE OBJECT</a>
+</p>
+
+<p>
+<a href="https://h2database.com/html/datatypes.html#numeric_type">NUMERIC / DECIMAL / DEC</a> without parameters
+now have scale 0. For a variable-scale data type see
+<a href="https://h2database.com/html/datatypes.html#decfloat_type">DECFLOAT</a>.
+Negative scale isn't allowed for these data types any more.
+The maximum precision is now 100,000.
+</p>
+
+<p>
+<a href="https://h2database.com/html/datatypes.html#enum_type">ENUM</a> values now have 1-based ordinal numbers.
+</p>
+
+<p>
+<a href="https://h2database.com/html/datatypes.html#array_type">Arrays</a> are now typed.
+Arrays with mixed types of elements aren't supported.
+In some cases they can be replaced with a new <a href="https://h2database.com/html/datatypes.html#row_type">ROW</a>
+data type.
+</p>
+
+<p>
+All non-standard data types, with exception for TINYINT, JAVA_OBJECT, ENUM, GEOMETRY, JSON, and UUID are deprecated.
+</p>
+
+<h2 id="identity_columns_and_sequences">Identity columns and sequences</h2>
+
+<p>
+Various legacy vendor-specific declarations and expressions are deprecated
+and may not work at all depending on compatibility mode.
+</p>
+
+<p>
+Identity columns should be normally declared with GENERATED BY DEFAULT AS IDENTITY or GENERATED ALWAYS AS IDENTITY
+clauses, options may also be specified.
+GENERATED ALWAYS AS IDENTITY columns cannot be assigned to a user-provided value
+unless OVERRIDING SYSTEM VALUE is specified.
+</p>
+
+<p>
+NULL cannot be specified as a value for IDENTITY column to force identity generation
+(with exception for some compatibility modes).
+Use DEFAULT or simply exclude this column from insert column list.
+</p>
+
+<p>
+IDENTITY() and SCOPE_IDENTITY() aren't available in Regular mode. If you need to get a generated value,
+you need to use <a href="https://h2database.com/html/grammar.html#data_change_delta_table">data change delta tables</a>
+or Statement.getGeneratedKeys().
+</p>
+
+<p>
+Undocumented Oracle-style .NEXTVAL and .CURRVAL expressions are restricted to Oracle compatibility mode.
+Other functions are deprecated for Regular mode.
+Use <a href="https://h2database.com/html/grammar.html#sequence_value_expression">sequence value expression</a> instead.
+</p>
+
+<h2 id="information_schema">INFORMATION_SCHEMA</h2>
+
+<p>
+INFORMATION_SCHEMA in H2 is now compliant with the SQL Standard and other database systems,
+but it isn't compliant with previous versions of H2.
+You may need to update your queries.
+</p>
+
+<h2 id="general">General</h2>
+
+<p>
+There are a lot more SQL keywords now. Many SQL statements feature far better support of SQL-Standard behaviour.
+There is a <a href="https://h2database.com/html/commands.html#set_non_keywords">NON_KEYWORDS</a> setting that
+can be used as a temporary workaround if your application uses them as unquoted identifiers.
+</p>
+
+<p>
+Numeric and boolean values aren't comparable. It means you need to use TRUE, FALSE, or UNKNOWN (NULL)
+as boolean literals. 1 and 0 don't work any more (with exception for some compatibility modes).
+</p>
+
+<p>
+Some other non-standard SQL syntax has been restricted to related compatibility modes.
+Since H2 2.0.204 there is a LEGACY compatibility mode that provides some limited compatibility with previous versions.
+</p>
+
+<p>
+Various deprecated grammar elements are marked in red in documentation. Please, avoid their usage.
+</p>
+
+<p>
+Migrating an old database to the new version works most of the times. However, there are a couple of important changes in the new version to keep in mind:
+</p>
+
+<ul>
+<li>Oracle-style units were never supported officially without being in Oracle compatibility mode, although some worked before. For example, the length of the VARCHAR datatype cannot be more specified using CHAR but CHARACTERS or OCTETS. CHAR and BYTE need to be used in Oracle compatibility mode.
+</li><li>IDENTITY syntax changed when type is specified: if the type for IDENTITY is specified, then the clause needs to be expanded as INTEGER GENERATED ALWAYS AS IDENTITY. Using just INTEGER IDENTITY is no more working.
+</li><li>LOG connection setting removed: PageStore was removed from H2 so the "LOG=0" setting at the end of the URL (like
+"jdbc:h2:file:/tmp/test;LOG=0") is no longer available.
+</li></ul>
+
+<!-- [close] { -->
+</div></td></tr></table>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="search.js"></script>
+<script type="text/javascript">
+function startTranslate() {
+    document.getElementById('translate').style.display='';
+    var script=document.createElement('script');
+    script.setAttribute("type","text/javascript");
+    script.setAttribute("src", "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit");
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+<!-- } --><!-- analytics --></body></html>

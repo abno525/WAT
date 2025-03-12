@@ -1,0 +1,512 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Copyright 2004-2023 H2 Group. Multiple-Licensed under the MPL 2.0,
+and the EPL 1.0 (https://h2database.com/html/license.html).
+Initial Developer: H2 Group
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+Window Functions
+</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<!-- [search] { -->
+<script type="text/javascript" src="navigation.js"></script>
+</head><body onload="highlight()" onscroll="scroll()">
+
+<table class="nav" onmousemove="return mouseMove(event)"><tr class="nav"><td class="nav" valign="top">
+<div id = "searchMenu" style="width: 180px; overflow: hidden;">
+<div class="menu" style="white-space:nowrap;">
+<img src="images/h2-logo-2.png"
+    alt="H2 database logo"
+    onclick="document.location='main.html'"
+    width="136" height="74"/>
+&nbsp;&nbsp;<span id = "goTop" onclick="window.scrollTo(0,0)" style="color: #fff; position:fixed; font-size: 20px; cursor: pointer;">&#x25b2;</span>
+</div>
+
+<form action="submit" onsubmit="return goFirst();">
+<table width="100%" class="search">
+    <tr class="search">
+        <td class="search" colspan="2">
+<!-- translate
+<a href="https://translate.google.com/translate?u=https%3A%2F%2Fh2database.com"
+    onclick="javascript:startTranslate();return false;">Translate</a>
+<div id = "translate" style="display:none"><div id = "google_translate_element"></div></div>
+translate -->
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+        <b><label for="search">Search:</label></b>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <input id = "search" name="search" type="text" size="16" maxlength="100" onkeyup="listWords(this.value, '')" /><br />
+            <input type="reset" id = "clear" style="display:none;" value="Clear" onclick="listWords('', '');" />
+        </td>
+    </tr>
+    <tr class="search" style="display:none;" >
+        <td class="search" style="width: 1%; vertical-align: middle;">
+            <input id = "highlight" type="checkbox" checked="checked" onclick="highlightCurrent(this.checked, search.value)" />
+        </td>
+        <td class="search" style="width: 99%; padding: 0px; vertical-align: middle;">
+            <label for="highlight">Highlight keyword(s)</label>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <table id = "result" style="border: 0px;">
+                <tr style="display:none"><td></td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</form>
+<div class="menu">
+<b><a href="main.html">Home</a></b><br />
+<a href="download.html">Download</a><br />
+<a href="cheatSheet.html">Cheat Sheet</a><br />
+<br />
+<b>Documentation</b><br />
+<a href="quickstart.html">Quickstart</a><br />
+<a href="installation.html">Installation</a><br />
+<a href="tutorial.html">Tutorial</a><br />
+<a href="features.html">Features</a><br />
+<a href="security.html">Security</a><br />
+<a href="performance.html">Performance</a><br />
+<a href="advanced.html">Advanced</a><br />
+<br />
+<b>Reference</b><br />
+<a href="commands.html">Commands</a><br />
+<a href="functions.html">Functions</a><br />
+&#8226;&nbsp;<a href="functions-aggregate.html">Aggregate</a>
+&#8226;&nbsp;<a href="functions-window.html">Window</a>
+<br /><br />
+<a href="datatypes.html">Data Types</a><br />
+<a href="grammar.html">SQL Grammar</a><br />
+<a href="systemtables.html">System Tables</a><br />
+<a href="../javadoc/index.html">Javadoc</a><br />
+<a href="https://github.com/h2database/h2database/releases/download/version-2.2.224/h2.pdf">PDF (2 MB)</a><br />
+<br />
+<b>Support</b><br />
+<a href="faq.html">FAQ</a><br />
+<a href="sourceError.html">Error Analyzer</a><br />
+<a href="https://groups.google.com/g/h2-database">Google Group</a><br />
+<br />
+<b>Appendix</b><br />
+<a href="history.html">History</a><br />
+<a href="license.html">License</a><br />
+<a href="build.html">Build</a><br />
+<a href="links.html">Links</a><br />
+<a href="mvstore.html">MVStore</a><br />
+<a href="architecture.html">Architecture</a><br />
+<a href="migration-to-v2.html">Migration to 2.0</a><br />
+<br />
+
+</div>
+</div>
+</td>
+
+<td class="nav" style="cursor: e-resize;" onmousedown="return mouseDown(event)" onmouseup="return mouseUp(event)">&nbsp;</td>
+<td class="nav"><div class="content">
+
+<!-- } -->
+
+<h1>Window Functions</h1>
+<h2 id="functions_window_index">Index</h2>
+<h3>Row Number Function</h3>
+<!-- syntax-start
+<p class="notranslate">
+
+    <a href="#row_number" >ROW_NUMBER</a><br />
+</p>
+syntax-end -->
+<!-- railroad-start -->
+<table class="notranslate index">
+    <tr>
+        <td class="index">
+            
+                <a href="#row_number" >ROW_NUMBER</a><br />
+                    </td><td class="index">
+                    </td><td class="index">
+                    </td>
+    </tr>
+</table>
+<!-- railroad-end -->
+
+<h3>Rank Functions</h3>
+<!-- syntax-start
+<p class="notranslate">
+
+    <a href="#rank" >RANK</a><br />
+
+    <a href="#dense_rank" >DENSE_RANK</a><br />
+
+    <a href="#percent_rank" >PERCENT_RANK</a><br />
+
+    <a href="#cume_dist" >CUME_DIST</a><br />
+</p>
+syntax-end -->
+<!-- railroad-start -->
+<table class="notranslate index">
+    <tr>
+        <td class="index">
+            
+                <a href="#rank" >RANK</a><br />
+            
+                <a href="#dense_rank" >DENSE_RANK</a><br />
+                    </td><td class="index">
+            
+                <a href="#percent_rank" >PERCENT_RANK</a><br />
+            
+                <a href="#cume_dist" >CUME_DIST</a><br />
+                    </td><td class="index">
+                    </td>
+    </tr>
+</table>
+<!-- railroad-end -->
+
+<h3>Lead or Lag Functions</h3>
+<!-- syntax-start
+<p class="notranslate">
+
+    <a href="#lead" >LEAD</a><br />
+
+    <a href="#lag" >LAG</a><br />
+</p>
+syntax-end -->
+<!-- railroad-start -->
+<table class="notranslate index">
+    <tr>
+        <td class="index">
+            
+                <a href="#lead" >LEAD</a><br />
+                    </td><td class="index">
+            
+                <a href="#lag" >LAG</a><br />
+                    </td><td class="index">
+                    </td>
+    </tr>
+</table>
+<!-- railroad-end -->
+
+<h3>Nth Value Functions</h3>
+<!-- syntax-start
+<p class="notranslate">
+
+    <a href="#first_value" >FIRST_VALUE</a><br />
+
+    <a href="#last_value" >LAST_VALUE</a><br />
+
+    <a href="#nth_value" >NTH_VALUE</a><br />
+</p>
+syntax-end -->
+<!-- railroad-start -->
+<table class="notranslate index">
+    <tr>
+        <td class="index">
+            
+                <a href="#first_value" >FIRST_VALUE</a><br />
+                    </td><td class="index">
+            
+                <a href="#last_value" >LAST_VALUE</a><br />
+                    </td><td class="index">
+            
+                <a href="#nth_value" >NTH_VALUE</a><br />
+                    </td>
+    </tr>
+</table>
+<!-- railroad-end -->
+
+<h3>Other Window Functions</h3>
+<!-- syntax-start
+<p class="notranslate">
+
+    <a href="#ntile" >NTILE</a><br />
+
+    <a href="#ratio_to_report" >RATIO_TO_REPORT</a><br />
+</p>
+syntax-end -->
+<!-- railroad-start -->
+<table class="notranslate index">
+    <tr>
+        <td class="index">
+            
+                <a href="#ntile" >NTILE</a><br />
+                    </td><td class="index">
+            
+                <a href="#ratio_to_report" >RATIO_TO_REPORT</a><br />
+                    </td><td class="index">
+                    </td>
+    </tr>
+</table>
+<!-- railroad-end -->
+
+<h2>Details</h2>
+<!-- railroad-start -->
+<p>Click on the header of the function to switch between railroad diagram and BNF.</p>
+<!-- railroad-end -->
+<p>Non-standard syntax is marked in green. Compatibility-only non-standard syntax is marked in red,
+don't use it unless you need it for compatibility with other databases or old versions of H2.</p>
+
+<h2>Row Number Function</h2>
+
+<h3 id="row_number" class="notranslate" onclick="switchBnf(this)">ROW_NUMBER</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+ROW_NUMBER() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">ROW_NUMBER ( ) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+ROW_NUMBER() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the number of the current row starting with 1. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT ROW_NUMBER() OVER (), * FROM TEST;<br />SELECT ROW_NUMBER() OVER (ORDER BY ID), * FROM TEST;<br />SELECT ROW_NUMBER() OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h2>Rank Functions</h2>
+
+<h3 id="rank" class="notranslate" onclick="switchBnf(this)">RANK</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+RANK() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">RANK ( ) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+RANK() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the rank of the current row. The rank of a row is the number of rows that precede this row plus 1. If two or more rows have the same values in <code>ORDER BY</code> columns, these rows get the same rank from the first row with the same values. It means that gaps in ranks are possible. This function requires window order clause. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p><p>See <a href="functions-aggregate.html#rank_aggregate"><code>RANK</code> aggregate</a> for a hypothetical set function with the same name.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT RANK() OVER (ORDER BY ID), * FROM TEST;<br />SELECT RANK() OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h3 id="dense_rank" class="notranslate" onclick="switchBnf(this)">DENSE_RANK</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+DENSE_RANK() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">DENSE_RANK ( ) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+DENSE_RANK() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the dense rank of the current row. The rank of a row is the number of groups of rows with the same values in <code>ORDER BY</code> columns that precede group with this row plus 1. If two or more rows have the same values in <code>ORDER BY</code> columns, these rows get the same rank. Gaps in ranks are not possible. This function requires window order clause. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p><p>See <a href="functions-aggregate.html#dense_rank_aggregate"><code>DENSE_RANK</code> aggregate</a> for a hypothetical set function with the same name.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT DENSE_RANK() OVER (ORDER BY ID), * FROM TEST;<br />SELECT DENSE_RANK() OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h3 id="percent_rank" class="notranslate" onclick="switchBnf(this)">PERCENT_RANK</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+PERCENT_RANK() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">PERCENT_RANK ( ) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+PERCENT_RANK() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the relative rank of the current row. The relative rank is calculated as (<code>RANK</code> - 1) / (<code>NR</code> - 1), where <code>RANK</code> is a rank of the row and <code>NR</code> is a number of rows in window partition with this row. Note that result is always 0 if window order clause is not specified. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p><p>See <a href="functions-aggregate.html#percent_rank_aggregate"><code>PERCENT_RANK</code> aggregate</a> for a hypothetical set function with the same name.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT PERCENT_RANK() OVER (ORDER BY ID), * FROM TEST;<br />SELECT PERCENT_RANK() OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h3 id="cume_dist" class="notranslate" onclick="switchBnf(this)">CUME_DIST</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+CUME_DIST() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">CUME_DIST ( ) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+CUME_DIST() OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the relative rank of the current row. The relative rank is calculated as <code>NP</code> / <code>NR</code> where <code>NP</code> is a number of rows that precede the current row or have the same values in <code>ORDER BY</code> columns and <code>NR</code> is a number of rows in window partition with this row. Note that result is always 1 if window order clause is not specified. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p><p>See <a href="functions-aggregate.html#cume_dist_aggregate"><code>CUME_DIST</code> aggregate</a> for a hypothetical set function with the same name.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT CUME_DIST() OVER (ORDER BY ID), * FROM TEST;<br />SELECT CUME_DIST() OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h2>Lead or Lag Functions</h2>
+
+<h3 id="lead" class="notranslate" onclick="switchBnf(this)">LEAD</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+LEAD(<a href="grammar.html#value">value</a> [, <a href="grammar.html#int">offsetInt</a> [, <a href="grammar.html#value">defaultValue</a>]]) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">LEAD ( <a href="grammar.html#value">value</a></code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">, <a href="grammar.html#int">offsetInt</a></code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">, <a href="grammar.html#value">defaultValue</a></code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table></td><td class="le"></td></tr></table></td><td class="d"><code class="c">)</code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d"><code class="c">RESPECT</code></td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><code class="c">IGNORE</code></td><td class="le"></td></tr></table></td><td class="d"><code class="c">NULLS</code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table><br /><table class="railroad"><tr class="railroad"><td class="d"><code class="c">OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+LEAD(<a href="grammar.html#value">value</a> [, <a href="grammar.html#int">offsetInt</a> [, <a href="grammar.html#value">defaultValue</a>]]) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the value in a next row with specified offset relative to the current row. Offset must be non-negative. If <code>IGNORE NULLS</code> is specified rows with null values in selected expression are skipped. If number of considered rows is less than specified relative number this function returns <code>NULL</code> or the specified default value, if any. If offset is 0 the value from the current row is returned unconditionally. This function requires window order clause. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT LEAD(X) OVER (ORDER BY ID), * FROM TEST;<br />SELECT LEAD(X, 2, 0) IGNORE NULLS OVER (<br />&nbsp;&nbsp;&nbsp;&nbsp;PARTITION BY CATEGORY ORDER BY ID<br />), * FROM TEST;</p>
+
+<h3 id="lag" class="notranslate" onclick="switchBnf(this)">LAG</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+LAG(<a href="grammar.html#value">value</a> [, <a href="grammar.html#int">offsetInt</a> [, <a href="grammar.html#value">defaultValue</a>]]) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">LAG ( <a href="grammar.html#value">value</a></code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">, <a href="grammar.html#int">offsetInt</a></code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">, <a href="grammar.html#value">defaultValue</a></code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table></td><td class="le"></td></tr></table></td><td class="d"><code class="c">)</code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d"><code class="c">RESPECT</code></td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><code class="c">IGNORE</code></td><td class="le"></td></tr></table></td><td class="d"><code class="c">NULLS</code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table><br /><table class="railroad"><tr class="railroad"><td class="d"><code class="c">OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+LAG(<a href="grammar.html#value">value</a> [, <a href="grammar.html#int">offsetInt</a> [, <a href="grammar.html#value">defaultValue</a>]]) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the value in a previous row with specified offset relative to the current row. Offset must be non-negative. If <code>IGNORE NULLS</code> is specified rows with null values in selected expression are skipped. If number of considered rows is less than specified relative number this function returns <code>NULL</code> or the specified default value, if any. If offset is 0 the value from the current row is returned unconditionally. This function requires window order clause. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT LAG(X) OVER (ORDER BY ID), * FROM TEST;<br />SELECT LAG(X, 2, 0) IGNORE NULLS OVER (<br />&nbsp;&nbsp;&nbsp;&nbsp;PARTITION BY CATEGORY ORDER BY ID<br />), * FROM TEST;</p>
+
+<h2>Nth Value Functions</h2>
+
+<h3 id="first_value" class="notranslate" onclick="switchBnf(this)">FIRST_VALUE</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+FIRST_VALUE(<a href="grammar.html#value">value</a>) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">FIRST_VALUE ( <a href="grammar.html#value">value</a> )</code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d"><code class="c">RESPECT</code></td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><code class="c">IGNORE</code></td><td class="le"></td></tr></table></td><td class="d"><code class="c">NULLS</code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table><br /><table class="railroad"><tr class="railroad"><td class="d"><code class="c">OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+FIRST_VALUE(<a href="grammar.html#value">value</a>) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the first value in a window. If <code>IGNORE NULLS</code> is specified null values are skipped and the function returns first non-null value, if any.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT FIRST_VALUE(X) OVER (ORDER BY ID), * FROM TEST;<br />SELECT FIRST_VALUE(X) IGNORE NULLS OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h3 id="last_value" class="notranslate" onclick="switchBnf(this)">LAST_VALUE</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+LAST_VALUE(<a href="grammar.html#value">value</a>) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">LAST_VALUE ( <a href="grammar.html#value">value</a> )</code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d"><code class="c">RESPECT</code></td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><code class="c">IGNORE</code></td><td class="le"></td></tr></table></td><td class="d"><code class="c">NULLS</code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table><br /><table class="railroad"><tr class="railroad"><td class="d"><code class="c">OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+LAST_VALUE(<a href="grammar.html#value">value</a>) [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the last value in a window. If <code>IGNORE NULLS</code> is specified null values are skipped and the function returns last non-null value before them, if any; if there is no non-null value it returns <code>NULL</code>. Note that the last value is actually a value in the current group of rows if window order clause is specified and window frame clause is not specified.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT LAST_VALUE(X) OVER (ORDER BY ID), * FROM TEST;<br />SELECT LAST_VALUE(X) IGNORE NULLS OVER (<br />&nbsp;&nbsp;&nbsp;&nbsp;PARTITION BY CATEGORY ORDER BY ID<br />&nbsp;&nbsp;&nbsp;&nbsp;RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING<br />), * FROM TEST;</p>
+
+<h3 id="nth_value" class="notranslate" onclick="switchBnf(this)">NTH_VALUE</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+NTH_VALUE(<a href="grammar.html#value">value</a>, <a href="grammar.html#int">nInt</a>) [FROM {FIRST|LAST}] [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">NTH_VALUE ( <a href="grammar.html#value">value</a> , <a href="grammar.html#int">nInt</a> )</code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">FROM</code></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d"><code class="c">FIRST</code></td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><code class="c">LAST</code></td><td class="le"></td></tr></table></td></tr></table></td><td class="le"></td></tr></table></td><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d">&nbsp;</td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><table class="railroad"><tr class="railroad"><td class="d"><table class="railroad"><tr class="railroad"><td class="ts"></td><td class="d"><code class="c">RESPECT</code></td><td class="te"></td></tr><tr class="railroad"><td class="ls"></td><td class="d"><code class="c">IGNORE</code></td><td class="le"></td></tr></table></td><td class="d"><code class="c">NULLS</code></td></tr></table></td><td class="le"></td></tr></table></td></tr></table><br /><table class="railroad"><tr class="railroad"><td class="d"><code class="c">OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+NTH_VALUE(<a href="grammar.html#value">value</a>, <a href="grammar.html#int">nInt</a>) [FROM {FIRST|LAST}] [{RESPECT|IGNORE} NULLS]
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Returns the value in a row with a specified relative number in a window. Relative row number must be positive. If <code>FROM LAST</code> is specified rows a counted backwards from the last row. If <code>IGNORE NULLS</code> is specified rows with null values in selected expression are skipped. If number of considered rows is less than specified relative number this function returns <code>NULL</code>. Note that the last row is actually a last row in the current group of rows if window order clause is specified and window frame clause is not specified.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT NTH_VALUE(X) OVER (ORDER BY ID), * FROM TEST;<br />SELECT NTH_VALUE(X) IGNORE NULLS OVER (<br />&nbsp;&nbsp;&nbsp;&nbsp;PARTITION BY CATEGORY ORDER BY ID<br />&nbsp;&nbsp;&nbsp;&nbsp;RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING<br />), * FROM TEST;</p>
+
+<h2>Other Window Functions</h2>
+
+<h3 id="ntile" class="notranslate" onclick="switchBnf(this)">NTILE</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+NTILE(<a href="grammar.html#long">long</a>) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+<div name="railroad">
+<table class="railroad"><tr class="railroad"><td class="d"><code class="c">NTILE ( <a href="grammar.html#long">long</a> ) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+NTILE(<a href="grammar.html#long">long</a>) OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a>
+</pre>
+syntax-end -->
+<p>Distributes the rows into a specified number of groups. Number of groups should be a positive long value. <code>NTILE</code> returns the 1-based number of the group to which the current row belongs. First groups will have more rows if number of rows is not divisible by number of groups. For example, if 5 rows are distributed into 2 groups this function returns 1 for the first 3 row and 2 for the last 2 rows. This function requires window order clause. Window frame clause is not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT NTILE(10) OVER (ORDER BY ID), * FROM TEST;<br />SELECT NTILE(5) OVER (PARTITION BY CATEGORY ORDER BY ID), * FROM TEST;</p>
+
+<h3 id="ratio_to_report" class="notranslate" onclick="switchBnf(this)">RATIO_TO_REPORT</h3>
+<!-- railroad-start -->
+<pre name="bnf" style="display: none">
+<span class="ruleH2">RATIO_TO_REPORT(<a href="grammar.html#value">value</a>)
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></span>
+</pre>
+<div name="railroad">
+<div class="ruleH2"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">RATIO_TO_REPORT ( <a href="grammar.html#value">value</a> )</code></td></tr></table></div><br /><div class="ruleH2"><table class="railroad"><tr class="railroad"><td class="d"><code class="c">OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></code></td></tr></table></div>
+</div>
+<!-- railroad-end -->
+<!-- syntax-start
+<pre>
+<span class="ruleH2">RATIO_TO_REPORT(<a href="grammar.html#value">value</a>)
+OVER <a href="grammar.html#window_name_or_specification">windowNameOrSpecification</a></span>
+</pre>
+syntax-end -->
+<p>Returns the ratio of a value to the sum of all values. If argument is <code>NULL</code> or sum of all values is 0, then the value of function is <code>NULL</code>. Window ordering and window frame clauses are not allowed for this function.</p><p>Window functions in H2 may require a lot of memory for large queries.</p>
+<p>Example:</p>
+<p class="notranslate">SELECT X, RATIO_TO_REPORT(X) OVER (PARTITION BY CATEGORY), CATEGORY FROM TEST;</p>
+
+<!--[if lte IE 7]><script language="javascript">switchBnf(null);</script><![endif]-->
+
+<!-- [close] { -->
+</div></td></tr></table>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="search.js"></script>
+<script type="text/javascript">
+function startTranslate() {
+    document.getElementById('translate').style.display='';
+    var script=document.createElement('script');
+    script.setAttribute("type","text/javascript");
+    script.setAttribute("src", "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit");
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+<!-- } --><!-- analytics --></body></html>
+

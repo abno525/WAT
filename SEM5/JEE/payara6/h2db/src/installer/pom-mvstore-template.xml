@@ -1,0 +1,35 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2-mvstore</artifactId>
+    <version>@version@</version>
+    <packaging>jar</packaging>
+    <name>H2 MVStore</name>
+    <url>https://h2database.com/html/mvstore.html</url>
+    <description>H2 MVStore</description>
+    <licenses>
+        <license>
+            <name>MPL 2.0</name>
+            <url>https://www.mozilla.org/en-US/MPL/2.0/</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>EPL 1.0</name>
+            <url>https://opensource.org/licenses/eclipse-1.0.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:https://github.com/h2database/h2database</connection>
+        <url>https://github.com/h2database/h2database</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>thomas.tom.mueller</id>
+            <name>Thomas Mueller</name>
+            <email>thomas.tom.mueller at gmail dot com</email>
+        </developer>
+    </developers>
+    <dependencies>
+    </dependencies>
+</project>

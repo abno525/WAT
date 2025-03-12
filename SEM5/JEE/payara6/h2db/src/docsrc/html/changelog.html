@@ -1,0 +1,416 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Copyright 2004-2023 H2 Group. Multiple-Licensed under the MPL 2.0,
+and the EPL 1.0 (https://h2database.com/html/license.html).
+Initial Developer: H2 Group
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+Change Log
+</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<!-- [search] { -->
+<script type="text/javascript" src="navigation.js"></script>
+</head><body onload="frameMe();">
+<table class="content"><tr class="content"><td class="content"><div class="contentDiv">
+<!-- } -->
+
+<h1>Change Log</h1>
+
+<h2>Next Version (unreleased)</h2>
+<ul>
+<li>Nothing yet
+</li>
+</ul>
+
+<h2>Version 2.2.224 (2023-09-17)</h2>
+<ul>
+<li>Issue #3883 Performance regression in 2.2.222
+</li>
+</ul>
+
+<h2>Version 2.2.222 (2023-08-22)</h2>
+<ul>
+<li>Fixed race condition in MVStore causing database corruption &quot;File corrupted in chunk ###&quot;
+</li>
+<li>Issue #3868: INFORMATION_SCHEMA.SESSIONS.ISOLATION_LEVEL returns isolation level of the current session in all rows
+</li>
+<li>PR #3865: Add possibility to enable virtual worker threads in TCP, Web, and PG servers on Java 21+
+</li>
+<li>PR #3864: Improve performance of TCP client driver when it is used from virtual threads
+</li>
+<li>Issue #2665: Parser shouldn't suggest compatibility syntax elements on parsing error
+</li>
+<li>Issue #3089: GREATEST and LEAST aren't fully compliant with the SQL Standard
+</li>
+<li>PR #3861: Improve SET EXCLUSIVE 2 and use stable time source for timeout exceptions
+</li>
+<li>PR #3859: Fix conversion of PK columns to identity columns
+</li>
+<li>Issue #3855: StackOverflowError when using TRACE_LEVEL_SYSTEM_OUT=4
+</li>
+<li>PR #3854: Fix issues with newer JVMs
+</li>
+<li>PR #3851: Remove lift configuration
+</li>
+<li>PR #3847: Fix the NullPointerException caused by accessing 'user' after the session has been closed
+</li>
+<li>PR #3846: Make DB_CLOSE_ON_EXIT safer
+</li>
+<li>PR #3842: Adds support of quotedNulls in CSV handling
+</li>
+</ul>
+
+<h2>Version 2.2.220 (2023-07-04)</h2>
+<ul>
+<li>PR #3834: Increase database format version
+</li>
+<li>PR #3833: Disallow plain webAdminPassword values to force usage of hashes
+</li>
+<li>PR #3831: Add Oracle-style NOWAIT, WAIT n, and SKIP LOCKED to FOR UPDATE clause
+</li>
+<li>PR #3830: Fix time zone of time/timestamp with time zone AT LOCAL
+</li>
+<li>PR #3822 / Issue #2671: Add quantified comparison predicates with array
+</li>
+<li>PR #3820: Add partial implementation of JSON simplified accessor
+</li>
+<li>PR #3818: Add support of underscores in numeric literals
+</li>
+<li>PR #3817: Add ANY_VALUE() aggregate function
+</li>
+<li>PR #3814: Fix regression in comparisons with infinities and NaNs
+</li>
+<li>Issue #3040: System objectIds are recycled twice when CTE queries are executed.
+</li>
+<li>PR #3812: UNIQUE null treatment
+</li>
+<li>PR #3811: BTRIM function, octal and binary literals and other changes
+</li>
+<li>Issue #352: In comparison text values are converted to INT even when they should be converted to BIGINT
+</li>
+<li>PR #3797: MSSQL mode: Discard table hints on plain UPDATE statements
+</li>
+<li>PR #3791: Formatted cast of datetimes to/from character strings
+</li>
+<li>Issue #3785: CSVRead: Fails to translate empty Numbers, when cells are quoted
+</li>
+<li>Issue #3762: Comparison predicates with row values don't create index conditions
+</li>
+<li>PR #3761: LAST_DAY function and other changes
+</li>
+<li>Issue #3705: Oracle DATE type: milliseconds (second fractions) rounded in H2 but truncated in Oracle (fixed in SYSDATE only)
+</li>
+<li>Issue #3642: AssertionError in mvstore.FileStore.serializeAndStore
+</li>
+<li>Issue #3675: H2 2.x cannot read PostgreSQL-style sequence generator start with option without WITH keyword
+</li>
+<li>Issue #3757: FORMATDATETIME function doesn't handle time with time zone properly
+</li>
+<li>PR #3756: Limit the row list allocation based on the row count
+</li>
+<li>PR #3753: Add missing NEWSEQUENTIALID function in MSSQLServer mode
+</li>
+<li>Issue #3730: FILE_READ from JAR filesystem on classpath results in file of length 0
+</li>
+<li>PR #3749: Fix min/max description for sequences
+</li>
+<li>PR #3739: Fix count(*) for linked table to Oracle
+</li>
+<li>Issue #3731: Division result exceeds numeric precision constraint
+</li>
+<li>PR #3718: Add test coverage for JDK 17
+</li>
+<li>Issue #3580: TestCrashAPI: NPE in ParserUtil.getTokenType() (called by Parser.readIfDataType1())
+</li>
+<li>PR #3709: Update copyright years and fix building of documentation
+</li>
+<li>Issue #3701: CLOBs can cause ClassCastExceptions
+</li>
+<li>Issue #3698: MySQL mode show columns from table, if modificationMetaId changed between prepared and execute.
+Then error occurred.
+</li>
+<li>PR #3699: Upgrade to the latest OSGi JDBC specification
+</li>
+<li>Issue #3659: User-defined variable "sticky" if used in view with join
+</li>
+<li>Issue #3693: Wrong result when intersecting unnested arrays
+</li>
+<li>PR #3691: GitHub Workflows security hardening
+</li>
+<li>PR #3688: Construct FormatTokenEnum.TOKENS during class initialization
+</li>
+<li>Issue #3682: MVStoreException at accountForRemovedPage
+</li>
+<li>Issue #3664: [2.1.214] NullPointerException in org.h2.command.query.Select.queryDistinct
+</li>
+<li>PR #3650: fix version number in the archives html table
+</li>
+<li>PR #3649: Basic implementation of materialized view
+</li>
+<li>Issue #3646: org.h2.mvstore.MVStoreException: Chunk metadata too long
+</li>
+<li>Issue #3645: The BITCOUNT function incorrectly counts BINARY/VARBINARY values of &gt;=16 bytes.
+</li>
+<li>Issue #3637: DB content massacred when opening a 2.1.214 DB with current master
+</li>
+<li>Issue #3636: "This store is closed" after two-phase commit
+</li>
+<li>PR #3639: Add random_uuid() alias to be compatible with postgres
+</li>
+<li>Issue #3640: SOUNDEX function should not be case-sensitive
+</li>
+<li>Issue #3633: Memory leak in case of in-memory database
+</li>
+<li>PR #3629 Better separation between MVStore and FileStore
+</li>
+<li>PR #3626: Improve memory estimation of CacheLongKeyLIRS and correct some passed memory sizes
+</li>
+<li>Issue #3619: PostgreSQL mode: STRING_AGG with prepared statement parameter not working
+</li>
+<li>Issue #3615: H2 Console connecting to Oracle DB will not show the list of tables
+</li>
+<li>PR #3613: Fix infinite loop in Tokenizer when special whitespace character is used
+</li>
+<li>Issue #3606: Support for GraalVMs native-image
+</li>
+<li>Issue #3607: [MySQL] UNIX_TIMESTAMP should return NULL
+</li>
+<li>Issue #3604: Improper FROM_1X implementation corrupts some BLOBs during migration
+</li>
+<li>Issue #3597: Support array element assignments in UPDATE statements
+</li>
+<li>Issue #3599: [2.1.214][MariaDB] DELETE query failure
+</li>
+<li>Issue #3600: NPE in MVTable.lock(), version 2.1.214
+</li>
+<li>Issue #3601: InvalidPathException when saving lock file
+</li>
+<li>Issue #3583: lob cleaner issue
+</li>
+<li>Issue #3585: Misuse ValueReal.DECIMAL_PRECISION when optimize typeinfo from DOUBLE to DECFLOAT
+</li>
+<li>Issue #3575: Possible syntax mismatch for json_object in MySQL compatibility mode
+</li>
+<li>PR #3577: Add support of TINYINT and DECFLOAT to TO_CHAR
+</li>
+<li>Issue #3567: No AUTO_INCREMENT in DatabaseMetaData.getTypeInfo()
+</li>
+<li>PR #3555: Add missing check for -webExternalNames flag
+</li>
+<li>Issue #3543: PostgreSQL mode, update with "from", why "NULL not allowed" error?
+</li>
+<li>PR #3542: Fix failed to delete a readonly file on Windows file systems
+</li>
+</ul>
+
+<h2>Version  2.1.214 (2022-06-13)</h2>
+<ul>
+<li>Issue #3538: In Postgres compatibility mode the NUMERIC type w/o scale should not default to 0
+</li>
+<li>Issue #3534: Subquery has incorrect empty parameters since 2.1.210 that breaks sameResultAsLast()
+</li>
+<li>Issue #3390: "ROW" cannot be set as a non keyword in 2.x
+</li>
+<li>Issue #3448: With linked table to postgreSQL, case-sensitive column names not respected in where part
+</li>
+<li>Issue #3434: JavaTableFunction is not closing underlying ResultSet when reading column list
+</li>
+<li>Issue #3468: Invalid DB format exception (for 1.x DB in 2.x h2) should have a specific SQLException vendorCode
+</li>
+<li>Issue #3528: Weird syntax error with HAVING clause in Oracle Mode
+</li>
+<li>Issue #3307: Fix SHUTDOWN DEFRAG for encrypted databases
+</li>
+<li>Issue #3515: Support for NEXTVAL property in DB2 mode
+</li>
+<li>Issue #3444: Conversion 'text' to 'integer' doesn't work anymore
+</li>
+<li>Issue #3493: org.h2.tools.DeleteDbFiles won't delete files under certain circumstances
+</li>
+<li>Issue #3486: FilePathDisk.newDirectoryStream() may fail on remote drive on Windows due to AccessDeniedException in Path.toRealPath()
+</li>
+<li>Issue #3484: LOB issue
+</li>
+</ul>
+
+<h2>Version  2.1.212 (2022-04-09)</h2>
+<ul>
+<li>Issue #3512: BITNOT(BIT_NAND_AGG(...) OVER ()) produces wrong result
+</li>
+<li>Issue #3510: PreparedStatement execution with java.io.tmpdir pointing to a directory symlink results in FileAlreadyExistsException
+</li>
+<li>PR #3504: Fix TypeInfo.getHigherGeometry() for types with and without SRID
+</li>
+<li>PR #3481: Add support for standard interval literals with precision
+</li>
+<li>Issue #3471: Possibility of corruption after SHUTDOWN DEFRAG
+</li>
+<li>Issue #3473: DROP TABLE/INDEX causes memory leak
+</li>
+<li>PR #3464 / Issue #3457: increase max length of VAR* types
+</li>
+<li>PR #3460: fix bug in readStoreHeader()
+</li>
+<li>PR #3458: Add performance tests for SQLite
+</li>
+<li>Issue #1808: Occasional NPE in concurrent update of LOB
+</li>
+<li>Issue #3439: Cannot use enum values in JSON without explicit casts
+</li>
+<li>Issue #3426: Regression: BIT(1) is not accepted in MySQL compatibility mode
+</li>
+<li>PR #3422: Allow combination of any geometry types with the same SRID
+</li>
+<li>Issue #3414: H2 2.1.210: Query with Parameters throws NPE
+</li>
+<li>Issue #3413: Parser can&apos;t parse REFERENCES &hellip; NOT NULL
+</li>
+<li>Issue #3410: OOME with nested derived tables
+</li>
+<li>Issue #3405: Enhance SCRIPT to support operations on STDOUT
+</li>
+<li>Issue #3406 / PR #3407: FunctionMultiReturn.polar2CartesianArray result set iteration throws ClassCastException
+</li>
+<li>Issue #3400: Regression: ORDER BY ROWNUM fails with General error: "Unexpected code path"
+</li>
+<li>Issue #3387: SYSDATE behavior changed in 2.x
+</li>
+<li>Issue #3394: SYSDATE Considered Identifier when used in inner select
+</li>
+<li>Issue #3391: Hang on merge statement with data change delta table
+</li>
+<li>PR #3384: Remove abandoned Java to C converter and fix some warnings from Sonatype Lift
+</li>
+<li>PR #3382: Use secure parser in H2AuthConfigXml to avoid future reports
+</li>
+</ul>
+
+<h2>Version 2.1.210 (2022-01-17)</h2>
+<ul>
+<li>PR #3381: Add IDENTITY() and SCOPE_IDENTITY() to LEGACY mode
+</li>
+<li>Issue #3376: Data cannot be read after insert of clob data > MAX_LENGTH_INPLACE_LOB with data change delta table
+</li>
+<li>PR #3377: Add -webExternalNames setting and fix WebServer.getConnection()
+</li>
+<li>PR #3367: Use faster checks of dimension systems of geometries
+</li>
+<li>PR #3369: Added v2 changes in migration docs
+</li>
+<li>Issue #3361: MemoryEstimator.estimateMemory() can return negative size
+</li>
+<li>PR #3362: Use BufferedReader instead of BufferedInputStream to avoid Illegal seek exception
+</li>
+<li>Issue #3353: Wrong rownum() scope for DML with change delta table
+</li>
+<li>PR #3352: make Javadoc happier
+</li>
+<li>Issue #3344: Changelog could link to github issue
+</li>
+<li>Issue #3340: JDBC index type seems wrong
+</li>
+<li>Issue #3336: FT_INIT error when mode=MySQL
+</li>
+<li>Issue #3334: Regression with CREATE ALIAS - Parameter "#2" is not set
+</li>
+<li>Issue #3321: Insert Primary Key after import CSV Data does not work
+</li>
+<li>PR #3323: Tokenize SQL before parsing and preserve tokens for recompilation
+</li>
+<li>PR #3320: Add Servlet 5-compatible servlet for H2 Console
+</li>
+<li>Issue #918: Parser fails recognising set operations in correlated subqueries
+</li>
+<li>Issue #2050: PostgreSQL with recursive fail with union in the final query
+</li>
+<li>PR #3316: Update copyright years
+</li>
+<li>PR #3315: Never put read locks into lockSharedSessions and other minor changes
+</li>
+<li>Issue #492: H2 does not correctly parse &lt;parenthesized joined table&gt;
+</li>
+<li>Issue #3311: Parser creates wrong join graph in some cases and uses wrong tables for column mapping
+</li>
+<li>FORCE_JOIN_ORDER setting is removed
+</li>
+<li>Issue #1983: Official build script is not compatible with Java 13
+</li>
+<li>PR #3305: Add UNIQUE(VALUE) and remove some non-standard keywords
+</li>
+<li>PR #3299: Remove useless StringBuilder.toString() call
+</li>
+<li>PR #3298: Delete unused sqlTypes array
+</li>
+</ul>
+
+<h2>Version 2.0.206 (2022-01-04)</h2>
+<ul>
+<li>Issue #3322: Create linked table fails when the table contains a Geometry with a data type specified
+</li>
+<li>Issue #3297: Unexpected GROUP BY results with indexed IGNORECASE column
+</li>
+</ul>
+
+<h2>Version 2.0.204 (2021-12-21)</h2>
+<ul>
+<li>Issue #3291: Add Legacy and Strict modes
+</li>
+<li>Issue #3287: SELECT statement works on 1.4.200 but fails on 2.0.202 with "Column XYZ must be in the GROUP BY list"
+</li>
+<li>PR #3284: Remove unused UNDO_LOG setting
+</li>
+<li>Issue #3251: Table with GEOMETRY column can't have a TriggerAdapter-based trigger any more
+</li>
+<li>PR #3281: DateTimeFormatter-based FORMATDATETIME and PARSEDATETIME and other changes
+</li>
+<li>Issue #3246: Spatial predicates with comparison are broken in MySQL compatibility mode
+</li>
+<li>Issue #3270: org.h2.jdbc.JdbcSQLFeatureNotSupportedException: Feature not supported: "Unsafe comparison or cast"
+</li>
+<li>Issue #3268 / PR #3275: Add TO_DATE and TO_TIMESTAMP to PostgreSQL compatibility mode
+</li>
+<li>PR #3274: Remove some dead code and unused params
+</li>
+<li>Issue #3266: Oracle compatibility NUMBER without precision and scale should have variable scale
+</li>
+<li>Issue #3263: Unable to store BigDecimal with negative scale in NUMERIC(19,6) column
+</li>
+<li>PR #3261: Small optimization for MIN and MAX
+</li>
+<li>Issue #3258 / PR #3259: Prevent incorrect optimization of COUNT(*) and other changes
+</li>
+<li>PR #3255: Throw proper exception when type of argument isn't known
+</li>
+<li>Issue #3249: Multi-column assignment with subquery throws exception when subquery doesn't return any rows
+</li>
+<li>PR #3248: Remove redundant uniqueness check, correct version in pom
+</li>
+<li>PR #3247: Avoid AIOBE exception in TestCrashAPI and in Transaction
+</li>
+<li>Issue #3241: ResultSetMetaData::getColumnTypeName should produce the correct ARRAY type
+</li>
+<li>Issue #3204: H2 Tools Web Console: Unicode 32
+</li>
+<li>Issue #3227: Regression when referencing outer joined column from correlated subquery
+</li>
+<li>Issue #3237: Can no longer cast CHAR(n) to BOOLEAN with n > 1
+</li>
+<li>Issue #3235: Regression in IN predicate with empty in list
+</li>
+<li>Issue #3236: NullPointerException in DatabaseMetaData::getIndexInfo when querying the info for views
+</li>
+<li>Issue #3233: General error when using NULL predicate on _ROWID_ column
+</li>
+<li>Issue #3223: TRUNC(v, p) with negative precisions no longer works
+</li>
+<li>Issue #3221: NullPointerException when creating domain
+</li>
+<li>Issue #3186: ResultSetMetaData.getSchemaName() returns empty string for aliased columns
+</li>
+</ul>
+
+
+<!-- [close] { --></div></td></tr></table><!-- } --><!-- analytics --></body></html>

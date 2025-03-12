@@ -1,0 +1,2046 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Copyright 2004-2023 H2 Group. Multiple-Licensed under the MPL 2.0,
+and the EPL 1.0 (https://h2database.com/html/license.html).
+Initial Developer: H2 Group
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+System Tables
+</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<!-- [search] { -->
+<script type="text/javascript" src="navigation.js"></script>
+</head><body onload="highlight()" onscroll="scroll()">
+
+<table class="nav" onmousemove="return mouseMove(event)"><tr class="nav"><td class="nav" valign="top">
+<div id = "searchMenu" style="width: 180px; overflow: hidden;">
+<div class="menu" style="white-space:nowrap;">
+<img src="images/h2-logo-2.png"
+    alt="H2 database logo"
+    onclick="document.location='main.html'"
+    width="136" height="74"/>
+&nbsp;&nbsp;<span id = "goTop" onclick="window.scrollTo(0,0)" style="color: #fff; position:fixed; font-size: 20px; cursor: pointer;">&#x25b2;</span>
+</div>
+
+<form action="submit" onsubmit="return goFirst();">
+<table width="100%" class="search">
+    <tr class="search">
+        <td class="search" colspan="2">
+<!-- translate
+<a href="https://translate.google.com/translate?u=https%3A%2F%2Fh2database.com"
+    onclick="javascript:startTranslate();return false;">Translate</a>
+<div id = "translate" style="display:none"><div id = "google_translate_element"></div></div>
+translate -->
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+        <b><label for="search">Search:</label></b>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <input id = "search" name="search" type="text" size="16" maxlength="100" onkeyup="listWords(this.value, '')" /><br />
+            <input type="reset" id = "clear" style="display:none;" value="Clear" onclick="listWords('', '');" />
+        </td>
+    </tr>
+    <tr class="search" style="display:none;" >
+        <td class="search" style="width: 1%; vertical-align: middle;">
+            <input id = "highlight" type="checkbox" checked="checked" onclick="highlightCurrent(this.checked, search.value)" />
+        </td>
+        <td class="search" style="width: 99%; padding: 0px; vertical-align: middle;">
+            <label for="highlight">Highlight keyword(s)</label>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <table id = "result" style="border: 0px;">
+                <tr style="display:none"><td></td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</form>
+<div class="menu">
+<b><a href="main.html">Home</a></b><br />
+<a href="download.html">Download</a><br />
+<a href="cheatSheet.html">Cheat Sheet</a><br />
+<br />
+<b>Documentation</b><br />
+<a href="quickstart.html">Quickstart</a><br />
+<a href="installation.html">Installation</a><br />
+<a href="tutorial.html">Tutorial</a><br />
+<a href="features.html">Features</a><br />
+<a href="security.html">Security</a><br />
+<a href="performance.html">Performance</a><br />
+<a href="advanced.html">Advanced</a><br />
+<br />
+<b>Reference</b><br />
+<a href="commands.html">Commands</a><br />
+<a href="functions.html">Functions</a><br />
+&#8226;&nbsp;<a href="functions-aggregate.html">Aggregate</a>
+&#8226;&nbsp;<a href="functions-window.html">Window</a>
+<br /><br />
+<a href="datatypes.html">Data Types</a><br />
+<a href="grammar.html">SQL Grammar</a><br />
+<a href="systemtables.html">System Tables</a><br />
+<a href="../javadoc/index.html">Javadoc</a><br />
+<a href="https://github.com/h2database/h2database/releases/download/version-2.2.224/h2.pdf">PDF (2 MB)</a><br />
+<br />
+<b>Support</b><br />
+<a href="faq.html">FAQ</a><br />
+<a href="sourceError.html">Error Analyzer</a><br />
+<a href="https://groups.google.com/g/h2-database">Google Group</a><br />
+<br />
+<b>Appendix</b><br />
+<a href="history.html">History</a><br />
+<a href="license.html">License</a><br />
+<a href="build.html">Build</a><br />
+<a href="links.html">Links</a><br />
+<a href="mvstore.html">MVStore</a><br />
+<a href="architecture.html">Architecture</a><br />
+<a href="migration-to-v2.html">Migration to 2.0</a><br />
+<br />
+
+</div>
+</div>
+</td>
+
+<td class="nav" style="cursor: e-resize;" onmousedown="return mouseDown(event)" onmouseup="return mouseUp(event)">&nbsp;</td>
+<td class="nav"><div class="content">
+
+<!-- } -->
+
+<h1>System Tables</h1>
+
+<h2>Index</h2>
+
+<p class="notranslate">
+<a href="#information_schema">Information Schema</a>
+</p>
+
+<!-- syntax-start
+<p class="notranslate">
+
+    <a href="#information_schema_check_constraints" >CHECK_CONSTRAINTS</a><br />
+
+    <a href="#information_schema_collations" >COLLATIONS</a><br />
+
+    <a href="#information_schema_columns" >COLUMNS</a><br />
+
+    <a href="#information_schema_column_privileges" >COLUMN_PRIVILEGES</a><br />
+
+    <a href="#information_schema_constants" >CONSTANTS</a><br />
+
+    <a href="#information_schema_constraint_column_usage" >CONSTRAINT_COLUMN_USAGE</a><br />
+
+    <a href="#information_schema_domains" >DOMAINS</a><br />
+
+    <a href="#information_schema_domain_constraints" >DOMAIN_CONSTRAINTS</a><br />
+
+    <a href="#information_schema_element_types" >ELEMENT_TYPES</a><br />
+
+    <a href="#information_schema_enum_values" >ENUM_VALUES</a><br />
+
+    <a href="#information_schema_fields" >FIELDS</a><br />
+
+    <a href="#information_schema_indexes" >INDEXES</a><br />
+
+    <a href="#information_schema_index_columns" >INDEX_COLUMNS</a><br />
+
+    <a href="#information_schema_information_schema_catalog_name" >INFORMATION_SCHEMA_CATALOG_NAME</a><br />
+
+    <a href="#information_schema_in_doubt" >IN_DOUBT</a><br />
+
+    <a href="#information_schema_key_column_usage" >KEY_COLUMN_USAGE</a><br />
+
+    <a href="#information_schema_locks" >LOCKS</a><br />
+
+    <a href="#information_schema_parameters" >PARAMETERS</a><br />
+
+    <a href="#information_schema_query_statistics" >QUERY_STATISTICS</a><br />
+
+    <a href="#information_schema_referential_constraints" >REFERENTIAL_CONSTRAINTS</a><br />
+
+    <a href="#information_schema_rights" >RIGHTS</a><br />
+
+    <a href="#information_schema_roles" >ROLES</a><br />
+
+    <a href="#information_schema_routines" >ROUTINES</a><br />
+
+    <a href="#information_schema_schemata" >SCHEMATA</a><br />
+
+    <a href="#information_schema_sequences" >SEQUENCES</a><br />
+
+    <a href="#information_schema_sessions" >SESSIONS</a><br />
+
+    <a href="#information_schema_session_state" >SESSION_STATE</a><br />
+
+    <a href="#information_schema_settings" >SETTINGS</a><br />
+
+    <a href="#information_schema_synonyms" >SYNONYMS</a><br />
+
+    <a href="#information_schema_tables" >TABLES</a><br />
+
+    <a href="#information_schema_table_constraints" >TABLE_CONSTRAINTS</a><br />
+
+    <a href="#information_schema_table_privileges" >TABLE_PRIVILEGES</a><br />
+
+    <a href="#information_schema_triggers" >TRIGGERS</a><br />
+
+    <a href="#information_schema_users" >USERS</a><br />
+
+    <a href="#information_schema_views" >VIEWS</a><br />
+</p>
+syntax-end -->
+<!-- railroad-start -->
+<table class="notranslate index">
+    <tr>
+        <td class="index">
+            
+                <a href="#information_schema_check_constraints" >CHECK_CONSTRAINTS</a><br />
+            
+                <a href="#information_schema_collations" >COLLATIONS</a><br />
+            
+                <a href="#information_schema_columns" >COLUMNS</a><br />
+            
+                <a href="#information_schema_column_privileges" >COLUMN_PRIVILEGES</a><br />
+            
+                <a href="#information_schema_constants" >CONSTANTS</a><br />
+            
+                <a href="#information_schema_constraint_column_usage" >CONSTRAINT_COLUMN_USAGE</a><br />
+            
+                <a href="#information_schema_domains" >DOMAINS</a><br />
+            
+                <a href="#information_schema_domain_constraints" >DOMAIN_CONSTRAINTS</a><br />
+            
+                <a href="#information_schema_element_types" >ELEMENT_TYPES</a><br />
+            
+                <a href="#information_schema_enum_values" >ENUM_VALUES</a><br />
+            
+                <a href="#information_schema_fields" >FIELDS</a><br />
+            
+                <a href="#information_schema_indexes" >INDEXES</a><br />
+                    </td><td class="index">
+            
+                <a href="#information_schema_index_columns" >INDEX_COLUMNS</a><br />
+            
+                <a href="#information_schema_information_schema_catalog_name" >INFORMATION_SCHEMA_CATALOG_NAME</a><br />
+            
+                <a href="#information_schema_in_doubt" >IN_DOUBT</a><br />
+            
+                <a href="#information_schema_key_column_usage" >KEY_COLUMN_USAGE</a><br />
+            
+                <a href="#information_schema_locks" >LOCKS</a><br />
+            
+                <a href="#information_schema_parameters" >PARAMETERS</a><br />
+            
+                <a href="#information_schema_query_statistics" >QUERY_STATISTICS</a><br />
+            
+                <a href="#information_schema_referential_constraints" >REFERENTIAL_CONSTRAINTS</a><br />
+            
+                <a href="#information_schema_rights" >RIGHTS</a><br />
+            
+                <a href="#information_schema_roles" >ROLES</a><br />
+            
+                <a href="#information_schema_routines" >ROUTINES</a><br />
+            
+                <a href="#information_schema_schemata" >SCHEMATA</a><br />
+                    </td><td class="index">
+            
+                <a href="#information_schema_sequences" >SEQUENCES</a><br />
+            
+                <a href="#information_schema_sessions" >SESSIONS</a><br />
+            
+                <a href="#information_schema_session_state" >SESSION_STATE</a><br />
+            
+                <a href="#information_schema_settings" >SETTINGS</a><br />
+            
+                <a href="#information_schema_synonyms" >SYNONYMS</a><br />
+            
+                <a href="#information_schema_tables" >TABLES</a><br />
+            
+                <a href="#information_schema_table_constraints" >TABLE_CONSTRAINTS</a><br />
+            
+                <a href="#information_schema_table_privileges" >TABLE_PRIVILEGES</a><br />
+            
+                <a href="#information_schema_triggers" >TRIGGERS</a><br />
+            
+                <a href="#information_schema_users" >USERS</a><br />
+            
+                <a href="#information_schema_views" >VIEWS</a><br />
+                    </td>
+    </tr>
+</table>
+<!-- railroad-end -->
+
+<p class="notranslate">
+<a href="#range_table">Range Table</a><br />
+</p>
+
+<h2 id="information_schema" class="notranslate">Information Schema</h2>
+<p>
+The system tables and views in the schema <code>INFORMATION_SCHEMA</code> contain the meta data
+of all tables, views, domains, and other objects in the database as well as the current settings.
+This documentation describes the default new version of <code>INFORMATION_SCHEMA</code> for H2 2.0.
+Old TCP clients (1.4.200 and below) see the legacy version of <code>INFORMATION_SCHEMA</code>,
+because they can't work with the new one. The legacy version is not documented.
+</p>
+
+
+<h3 class="notranslate" id="information_schema_check_constraints">CHECK_CONSTRAINTS</h3>
+<p class="notranslate">
+Contains CHECK clauses of check and domain constraints.
+</p>
+<table class="main">
+<tbody>
+<tr><td>CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constraint.
+</td></tr>
+<tr><td>CHECK_CLAUSE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of CHECK clause.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_collations">COLLATIONS</h3>
+<p class="notranslate">
+Contains available collations.
+</p>
+<table class="main">
+<tbody>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>PAD_ATTRIBUTE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO PAD&#39;.
+</td></tr>
+<tr><td>LANGUAGE_TAG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The language tag.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_columns">COLUMNS</h3>
+<p class="notranslate">
+Contains information about columns of tables.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>COLUMN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the column.
+</td></tr>
+<tr><td>ORDINAL_POSITION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The ordinal position (1-based).
+</td></tr>
+<tr><td>COLUMN_DEFAULT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of DEFAULT expression, if any.
+</td></tr>
+<tr><td>IS_NULLABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether column may contain NULL value (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>DOMAIN_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog for columns with domain.
+</td></tr>
+<tr><td>DOMAIN_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of domain for columns with domain.
+</td></tr>
+<tr><td>DOMAIN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of domain for columns with domain.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>IS_IDENTITY</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether column is an identity column (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>IDENTITY_GENERATION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Identity generation (&#39;ALWAYS&#39; or &#39;BY DEFAULT&#39;) for identity columns.
+</td></tr>
+<tr><td>IDENTITY_START</td><td>BIGINT</td></tr><tr><td colspan="2">
+The initial start value for identity columns.
+</td></tr>
+<tr><td>IDENTITY_INCREMENT</td><td>BIGINT</td></tr><tr><td colspan="2">
+The increment value for identity columns.
+</td></tr>
+<tr><td>IDENTITY_MAXIMUM</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum value for identity columns.
+</td></tr>
+<tr><td>IDENTITY_MINIMUM</td><td>BIGINT</td></tr><tr><td colspan="2">
+The minimum value for identity columns.
+</td></tr>
+<tr><td>IDENTITY_CYCLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether identity values are cycled (&#39;YES&#39; or &#39;NO&#39;) for identity columns.
+</td></tr>
+<tr><td>IS_GENERATED</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether column is an generated column (&#39;ALWAYS&#39; or &#39;NEVER&#39;)
+</td></tr>
+<tr><td>GENERATION_EXPRESSION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of GENERATED ALWAYS AS expression for generated columns.
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>IDENTITY_BASE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The current base value for identity columns.
+</td></tr>
+<tr><td>IDENTITY_CACHE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The cache size for identity columns.
+</td></tr>
+<tr><td>COLUMN_ON_UPDATE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of ON UPDATE expression, if any.
+</td></tr>
+<tr><td>IS_VISIBLE</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether column is visible (included into SELECT *).
+</td></tr>
+<tr><td>DEFAULT_ON_NULL</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether value of DEFAULT expression is used when NULL value is inserted.
+</td></tr>
+<tr><td>SELECTIVITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The selectivity of a column (0-100), used to choose the best index.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_column_privileges">COLUMN_PRIVILEGES</h3>
+<p class="notranslate">
+Contains information about privileges of columns.
+H2 doesn&#39;t have per-column privileges, so this view actually contains privileges of their tables.
+</p>
+<table class="main">
+<tbody>
+<tr><td>GRANTOR</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+NULL.
+</td></tr>
+<tr><td>GRANTEE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of grantee.
+</td></tr>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>COLUMN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the column.
+</td></tr>
+<tr><td>PRIVILEGE_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;SELECT&#39;, &#39;INSERT&#39;, &#39;UPDATE&#39;, or &#39;DELETE&#39;.
+</td></tr>
+<tr><td>IS_GRANTABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether grantee may grant rights to this object to others (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_constants">CONSTANTS</h3>
+<p class="notranslate">
+Contains information about constants.
+</p>
+<table class="main">
+<tbody>
+<tr><td>CONSTANT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTANT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constant.
+</td></tr>
+<tr><td>CONSTANT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constant.
+</td></tr>
+<tr><td>VALUE_DEFINITION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of value.
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_constraint_column_usage">CONSTRAINT_COLUMN_USAGE</h3>
+<p class="notranslate">
+Contains information about columns used in constraints.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>COLUMN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the column.
+</td></tr>
+<tr><td>CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constraint.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_domains">DOMAINS</h3>
+<p class="notranslate">
+Contains information about domains.
+</p>
+<table class="main">
+<tbody>
+<tr><td>DOMAIN_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>DOMAIN_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of domain.
+</td></tr>
+<tr><td>DOMAIN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of domain.
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>DOMAIN_DEFAULT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of DEFAULT expression, if any.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>DOMAIN_ON_UPDATE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL of ON UPDATE expression, if any.
+</td></tr>
+<tr><td>PARENT_DOMAIN_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for domains with parent domain.
+</td></tr>
+<tr><td>PARENT_DOMAIN_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of parent domain for domains with parent domain.
+</td></tr>
+<tr><td>PARENT_DOMAIN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of parent domain for domains with parent domain.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_domain_constraints">DOMAIN_CONSTRAINTS</h3>
+<p class="notranslate">
+Contains basic information about domain constraints.
+See also INFORMATION_SCHEMA.CHECK_CONSTRAINTS.
+</p>
+<table class="main">
+<tbody>
+<tr><td>CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constraint.
+</td></tr>
+<tr><td>DOMAIN_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>DOMAIN_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of domain.
+</td></tr>
+<tr><td>DOMAIN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of domain.
+</td></tr>
+<tr><td>IS_DEFERRABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>INITIALLY_DEFERRED</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_element_types">ELEMENT_TYPES</h3>
+<p class="notranslate">
+Contains information about types of array elements.
+</p>
+<table class="main">
+<tbody>
+<tr><td>OBJECT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>OBJECT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the object.
+</td></tr>
+<tr><td>OBJECT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the object.
+</td></tr>
+<tr><td>OBJECT_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The TYPE of the object (&#39;CONSTANT&#39;, &#39;DOMAIN&#39;, &#39;TABLE&#39;, or &#39;ROUTINE&#39;).
+</td></tr>
+<tr><td>COLLECTION_TYPE_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The DTD_IDENTIFIER value of the object.
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_enum_values">ENUM_VALUES</h3>
+<p class="notranslate">
+Contains information about enum values.
+</p>
+<table class="main">
+<tbody>
+<tr><td>OBJECT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>OBJECT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the object.
+</td></tr>
+<tr><td>OBJECT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the object.
+</td></tr>
+<tr><td>OBJECT_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The TYPE of the object (&#39;CONSTANT&#39;, &#39;DOMAIN&#39;, &#39;TABLE&#39;, or &#39;ROUTINE&#39;).
+</td></tr>
+<tr><td>ENUM_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The DTD_IDENTIFIER value of the object.
+</td></tr>
+<tr><td>VALUE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of enum value.
+</td></tr>
+<tr><td>VALUE_ORDINAL</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The ordinal of enum value.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_fields">FIELDS</h3>
+<p class="notranslate">
+Contains information about fields of row values.
+</p>
+<table class="main">
+<tbody>
+<tr><td>OBJECT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>OBJECT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the object.
+</td></tr>
+<tr><td>OBJECT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the object.
+</td></tr>
+<tr><td>OBJECT_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The TYPE of the object (&#39;CONSTANT&#39;, &#39;DOMAIN&#39;, &#39;TABLE&#39;, or &#39;ROUTINE&#39;).
+</td></tr>
+<tr><td>ROW_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The DTD_IDENTIFIER value of the object.
+</td></tr>
+<tr><td>FIELD_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the field of the row value.
+</td></tr>
+<tr><td>ORDINAL_POSITION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The ordinal position (1-based).
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_indexes">INDEXES</h3>
+<p class="notranslate">
+Contains information about indexes.
+</p>
+<table class="main">
+<tbody>
+<tr><td>INDEX_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>INDEX_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the index.
+</td></tr>
+<tr><td>INDEX_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the index.
+</td></tr>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>INDEX_TYPE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The type of the index (&#39;PRIMARY KEY&#39;, &#39;UNIQUE INDEX&#39;, &#39;SPATIAL INDEX&#39;, etc.)
+</td></tr>
+<tr><td>NULLS_DISTINCT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;YES&#39; for unique indexes with distinct null values,
+&#39;NO&#39; for unique indexes with not distinct null values,
+&#39;ALL&#39; for multi-column unique indexes where only rows with null values in all unique columns are distinct,
+NULL for other types of indexes.
+</td></tr>
+<tr><td>IS_GENERATED</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether index is generated by a constraint and belongs to it.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+<tr><td>INDEX_CLASS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The Java class name of index implementation.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_index_columns">INDEX_COLUMNS</h3>
+<p class="notranslate">
+Contains information about columns used in indexes.
+</p>
+<table class="main">
+<tbody>
+<tr><td>INDEX_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>INDEX_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the index.
+</td></tr>
+<tr><td>INDEX_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the index.
+</td></tr>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>COLUMN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the column.
+</td></tr>
+<tr><td>ORDINAL_POSITION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The ordinal position (1-based).
+</td></tr>
+<tr><td>ORDERING_SPECIFICATION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;ASC&#39; or &#39;DESC&#39;.
+</td></tr>
+<tr><td>NULL_ORDERING</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;FIRST&#39;, &#39;LAST&#39;, or NULL.
+</td></tr>
+<tr><td>IS_UNIQUE</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether this column is a part of unique column list of a unique index (TRUE or FALSE).
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_information_schema_catalog_name">INFORMATION_SCHEMA_CATALOG_NAME</h3>
+<p class="notranslate">
+Contains a single row with the name of catalog (database name).
+</p>
+<table class="main">
+<tbody>
+<tr><td>CATALOG_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_in_doubt">IN_DOUBT</h3>
+<p class="notranslate">
+Contains information about prepared transactions.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TRANSACTION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of prepared transaction.
+</td></tr>
+<tr><td>TRANSACTION_STATE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The state of prepared transaction (&#39;IN_DOUBT&#39;, &#39;COMMIT&#39;, or &#39;ROLLBACK&#39;).
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_key_column_usage">KEY_COLUMN_USAGE</h3>
+<p class="notranslate">
+Contains information about columns used by primary key, unique, or referential constraint.
+</p>
+<table class="main">
+<tbody>
+<tr><td>CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constraint.
+</td></tr>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>COLUMN_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the column.
+</td></tr>
+<tr><td>ORDINAL_POSITION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The ordinal position (1-based).
+</td></tr>
+<tr><td>POSITION_IN_UNIQUE_CONSTRAINT</td><td>INTEGER</td></tr><tr><td colspan="2">
+The ordinal position in the referenced unique constraint (1-based).
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_locks">LOCKS</h3>
+<p class="notranslate">
+Contains information about tables locked by sessions.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>SESSION_ID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The identifier of the session.
+</td></tr>
+<tr><td>LOCK_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;READ&#39; or &#39;WRITE&#39;.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_parameters">PARAMETERS</h3>
+<p class="notranslate">
+Contains information about parameters of routines.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SPECIFIC_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>SPECIFIC_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the overloaded version of routine.
+</td></tr>
+<tr><td>SPECIFIC_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the overloaded version of routine.
+</td></tr>
+<tr><td>ORDINAL_POSITION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The ordinal position (1-based).
+</td></tr>
+<tr><td>PARAMETER_MODE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;IN&#39;.
+</td></tr>
+<tr><td>IS_RESULT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>AS_LOCATOR</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;YES&#39; for LOBs, &#39;NO&#39; for others.
+</td></tr>
+<tr><td>PARAMETER_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the parameter.
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>PARAMETER_DEFAULT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+NULL.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_query_statistics">QUERY_STATISTICS</h3>
+<p class="notranslate">
+Contains statistics of queries when query statistics gathering is enabled.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SQL_STATEMENT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL statement.
+</td></tr>
+<tr><td>EXECUTION_COUNT</td><td>INTEGER</td></tr><tr><td colspan="2">
+The execution count.
+</td></tr>
+<tr><td>MIN_EXECUTION_TIME</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The minimum execution time in milliseconds.
+</td></tr>
+<tr><td>MAX_EXECUTION_TIME</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The maximum execution time in milliseconds.
+</td></tr>
+<tr><td>CUMULATIVE_EXECUTION_TIME</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The total execution time in milliseconds.
+</td></tr>
+<tr><td>AVERAGE_EXECUTION_TIME</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The average execution time in milliseconds.
+</td></tr>
+<tr><td>STD_DEV_EXECUTION_TIME</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The standard deviation of execution time in milliseconds.
+</td></tr>
+<tr><td>MIN_ROW_COUNT</td><td>BIGINT</td></tr><tr><td colspan="2">
+The minimum number of rows.
+</td></tr>
+<tr><td>MAX_ROW_COUNT</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum number of rows.
+</td></tr>
+<tr><td>CUMULATIVE_ROW_COUNT</td><td>BIGINT</td></tr><tr><td colspan="2">
+The total number of rows.
+</td></tr>
+<tr><td>AVERAGE_ROW_COUNT</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The average number of rows.
+</td></tr>
+<tr><td>STD_DEV_ROW_COUNT</td><td>DOUBLE PRECISION</td></tr><tr><td colspan="2">
+The standard deviation of number of rows.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_referential_constraints">REFERENTIAL_CONSTRAINTS</h3>
+<p class="notranslate">
+Contains additional information about referential constraints.
+</p>
+<table class="main">
+<tbody>
+<tr><td>CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constraint.
+</td></tr>
+<tr><td>UNIQUE_CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>UNIQUE_CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of referenced unique constraint.
+</td></tr>
+<tr><td>UNIQUE_CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of referenced unique constraint.
+</td></tr>
+<tr><td>MATCH_OPTION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NONE&#39;.
+</td></tr>
+<tr><td>UPDATE_RULE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The rule for UPDATE in referenced table (&#39;RESTRICT&#39;, &#39;CASCADE&#39;, &#39;SET DEFAULT&#39;, or &#39;SET NULL&#39;).
+</td></tr>
+<tr><td>DELETE_RULE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The rule for DELETE in referenced table (&#39;RESTRICT&#39;, &#39;CASCADE&#39;, &#39;SET DEFAULT&#39;, or &#39;SET NULL&#39;).
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_rights">RIGHTS</h3>
+<p class="notranslate">
+Contains information about granted rights and roles.
+</p>
+<table class="main">
+<tbody>
+<tr><td>GRANTEE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of grantee.
+</td></tr>
+<tr><td>GRANTEETYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;USER&#39; if grantee is a user, &#39;ROLE&#39; if grantee is a role.
+</td></tr>
+<tr><td>GRANTEDROLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the granted role for role grants.
+</td></tr>
+<tr><td>RIGHTS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The set of rights (&#39;SELECT&#39;, &#39;DELETE&#39;, &#39;INSERT&#39;, &#39;UPDATE&#39;, or &#39;ALTER ANY SCHEMA&#39; separated with &#39;, &#39;) for table grants.
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_roles">ROLES</h3>
+<p class="notranslate">
+Contains information about roles.
+</p>
+<table class="main">
+<tbody>
+<tr><td>ROLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the role.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_routines">ROUTINES</h3>
+<p class="notranslate">
+Contains information about user-defined routines, including aggregate functions.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SPECIFIC_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>SPECIFIC_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the overloaded version of routine.
+</td></tr>
+<tr><td>SPECIFIC_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the overloaded version of routine.
+</td></tr>
+<tr><td>ROUTINE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>ROUTINE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the routine.
+</td></tr>
+<tr><td>ROUTINE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the routine.
+</td></tr>
+<tr><td>ROUTINE_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;PROCEDURE&#39;, &#39;FUNCTION&#39;, or &#39;AGGREGATE&#39;.
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>CHARACTER_MAXIMUM_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in characters for character string data types.
+For binary string data types contains the same value as CHARACTER_OCTET_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_OCTET_LENGTH</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum length in bytes for binary string data types.
+For character string data types contains the same value as CHARACTER_MAXIMUM_LENGTH.
+</td></tr>
+<tr><td>CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The &#39;Unicode&#39; for character string data types.
+</td></tr>
+<tr><td>COLLATION_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name) for character string data types.
+</td></tr>
+<tr><td>COLLATION_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema for character string data types.
+</td></tr>
+<tr><td>COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of collation for character string data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>DATETIME_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The fractional seconds precision for datetime data types.
+</td></tr>
+<tr><td>INTERVAL_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type of interval qualifier for interval data types.
+</td></tr>
+<tr><td>INTERVAL_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The leading field precision for interval data types.
+</td></tr>
+<tr><td>MAXIMUM_CARDINALITY</td><td>INTEGER</td></tr><tr><td colspan="2">
+The maximum cardinality for array data types.
+</td></tr>
+<tr><td>DTD_IDENTIFIER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The data type identifier to read additional information from INFORMATION_SCHEMA.ELEMENT_TYPES for array data types,
+INFORMATION_SCHEMA.ENUM_VALUES for ENUM data type, and INFORMATION_SCHEMA.FIELDS for row value data types.
+</td></tr>
+<tr><td>ROUTINE_BODY</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;EXTERNAL&#39;.
+</td></tr>
+<tr><td>ROUTINE_DEFINITION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Source code or NULL if not applicable or user doesn&#39;t have ADMIN privileges.
+</td></tr>
+<tr><td>EXTERNAL_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the class or method.
+</td></tr>
+<tr><td>EXTERNAL_LANGUAGE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;JAVA&#39;.
+</td></tr>
+<tr><td>PARAMETER_STYLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;GENERAL&#39;.
+</td></tr>
+<tr><td>IS_DETERMINISTIC</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether routine is deterministic (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>GEOMETRY_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The geometry type constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>GEOMETRY_SRID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The geometry SRID (Spatial Reference Identifier) constraint, if any, for geometry data types.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_schemata">SCHEMATA</h3>
+<p class="notranslate">
+Contains information about schemas.
+</p>
+<table class="main">
+<tbody>
+<tr><td>CATALOG_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>SCHEMA_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema name.
+</td></tr>
+<tr><td>SCHEMA_OWNER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of schema owner.
+</td></tr>
+<tr><td>DEFAULT_CHARACTER_SET_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>DEFAULT_CHARACTER_SET_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of public schema.
+</td></tr>
+<tr><td>DEFAULT_CHARACTER_SET_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;Unicode&#39;.
+</td></tr>
+<tr><td>SQL_PATH</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+NULL.
+</td></tr>
+<tr><td>DEFAULT_COLLATION_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of database collation.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_sequences">SEQUENCES</h3>
+<p class="notranslate">
+Contains information about sequences.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SEQUENCE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>SEQUENCE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the sequence.
+</td></tr>
+<tr><td>SEQUENCE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the sequence.
+</td></tr>
+<tr><td>DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL data type name.
+</td></tr>
+<tr><td>NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The precision for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_PRECISION_RADIX</td><td>INTEGER</td></tr><tr><td colspan="2">
+The radix of precision (2 or 10) for numeric data types.
+</td></tr>
+<tr><td>NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The scale for numeric data types.
+</td></tr>
+<tr><td>START_VALUE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The initial start value.
+</td></tr>
+<tr><td>MINIMUM_VALUE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The minimum value.
+</td></tr>
+<tr><td>MAXIMUM_VALUE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The maximum value.
+</td></tr>
+<tr><td>INCREMENT</td><td>BIGINT</td></tr><tr><td colspan="2">
+The increment value.
+</td></tr>
+<tr><td>CYCLE_OPTION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether values are cycled (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>DECLARED_DATA_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The declared SQL data type name for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_PRECISION</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared precision, if any, for numeric data types.
+</td></tr>
+<tr><td>DECLARED_NUMERIC_SCALE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The declared scale, if any, for numeric data types.
+</td></tr>
+<tr><td>BASE_VALUE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The current base value.
+</td></tr>
+<tr><td>CACHE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The cache size.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_sessions">SESSIONS</h3>
+<p class="notranslate">
+Contains information about sessions.
+Only users with ADMIN privileges can see all sessions, other users can see only own session.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SESSION_ID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The identifier of the session.
+</td></tr>
+<tr><td>USER_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the user.
+</td></tr>
+<tr><td>SERVER</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the server used by remote connection.
+</td></tr>
+<tr><td>CLIENT_ADDR</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The client address and port used by remote connection.
+</td></tr>
+<tr><td>CLIENT_INFO</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Additional client information provided by remote connection.
+</td></tr>
+<tr><td>SESSION_START</td><td>TIMESTAMP(9) WITH TIME ZONE</td></tr><tr><td colspan="2">
+When this session was started.
+</td></tr>
+<tr><td>ISOLATION_LEVEL</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The isolation level of the session (&#39;READ UNCOMMITTED&#39;, &#39;READ COMMITTED&#39;, &#39;REPEATABLE READ&#39;, &#39;SNAPSHOT&#39;,
+or &#39;SERIALIZABLE&#39;).
+</td></tr>
+<tr><td>EXECUTING_STATEMENT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The currently executing statement, if any.
+</td></tr>
+<tr><td>EXECUTING_STATEMENT_START</td><td>TIMESTAMP(9) WITH TIME ZONE</td></tr><tr><td colspan="2">
+When the current command was started, if any.
+</td></tr>
+<tr><td>CONTAINS_UNCOMMITTED</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether the session contains any uncommitted changes.
+</td></tr>
+<tr><td>SESSION_STATE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The state of the session (&#39;RUNNING&#39;, &#39;SLEEP&#39;, etc.)
+</td></tr>
+<tr><td>BLOCKER_ID</td><td>INTEGER</td></tr><tr><td colspan="2">
+The identifier or blocking session, if any.
+</td></tr>
+<tr><td>SLEEP_SINCE</td><td>TIMESTAMP(9) WITH TIME ZONE</td></tr><tr><td colspan="2">
+When the last command was finished if session is sleeping.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_session_state">SESSION_STATE</h3>
+<p class="notranslate">
+Contains the state of the current session.
+</p>
+<table class="main">
+<tbody>
+<tr><td>STATE_KEY</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The key.
+</td></tr>
+<tr><td>STATE_COMMAND</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The SQL command that can be used to restore the state.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_settings">SETTINGS</h3>
+<p class="notranslate">
+Contains values of various settings.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SETTING_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the setting.
+</td></tr>
+<tr><td>SETTING_VALUE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The value of the setting.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_synonyms">SYNONYMS</h3>
+<p class="notranslate">
+Contains information about table synonyms.
+</p>
+<table class="main">
+<tbody>
+<tr><td>SYNONYM_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>SYNONYM_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the synonym.
+</td></tr>
+<tr><td>SYNONYM_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the synonym.
+</td></tr>
+<tr><td>SYNONYM_FOR</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the referenced table.
+</td></tr>
+<tr><td>SYNONYM_FOR_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the referenced schema.
+</td></tr>
+<tr><td>TYPE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;SYNONYM&#39;.
+</td></tr>
+<tr><td>STATUS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;VALID&#39;.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_tables">TABLES</h3>
+<p class="notranslate">
+Contains information about tables.
+See also INFORMATION_SCHEMA.COLUMNS.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>TABLE_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;BASE TABLE&#39;, &#39;VIEW&#39;, &#39;GLOBAL TEMPORARY&#39;, or &#39;LOCAL TEMPORARY&#39;.
+</td></tr>
+<tr><td>IS_INSERTABLE_INTO</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether the table is insertable (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>COMMIT_ACTION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;DELETE&#39;, &#39;DROP&#39;, or &#39;PRESERVE&#39; for temporary tables.
+</td></tr>
+<tr><td>STORAGE_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;CACHED&#39; for regular persisted tables, &#39;MEMORY&#39; for in-memory tables or persisted tables with in-memory indexes,
+&#39;GLOBAL TEMPORARY&#39; or &#39;LOCAL TEMPORARY&#39; for temporary tables, &#39;EXTERNAL&#39; for tables with external table engines,
+or &#39;TABLE LINK&#39; for linked tables.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+<tr><td>LAST_MODIFICATION</td><td>BIGINT</td></tr><tr><td colspan="2">
+The sequence number of the last modification, if applicable.
+</td></tr>
+<tr><td>TABLE_CLASS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The Java class name of implementation.
+</td></tr>
+<tr><td>ROW_COUNT_ESTIMATE</td><td>BIGINT</td></tr><tr><td colspan="2">
+The approximate number of rows if known or some default value if unknown.
+For regular tables contains the total number of rows including the uncommitted rows.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_table_constraints">TABLE_CONSTRAINTS</h3>
+<p class="notranslate">
+Contains basic information about table constraints (check, primary key, unique, and referential).
+</p>
+<table class="main">
+<tbody>
+<tr><td>CONSTRAINT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>CONSTRAINT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the constraint.
+</td></tr>
+<tr><td>CONSTRAINT_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;CHECK&#39;, &#39;PRIMARY KEY&#39;, &#39;UNIQUE&#39;, or &#39;REFERENTIAL&#39;.
+</td></tr>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>IS_DEFERRABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>INITIALLY_DEFERRED</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>ENFORCED</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;YES&#39; for non-referential constants.
+&#39;YES&#39; for referential constants when checks for referential integrity are enabled for the both referenced and
+referencing tables and &#39;NO&#39; when they are disabled.
+</td></tr>
+<tr><td>NULLS_DISTINCT</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;YES&#39; for unique constraints with distinct null values,
+&#39;NO&#39; for unique constraints with not distinct null values,
+&#39;ALL&#39; for multi-column unique constraints where only rows with null values in all unique columns are distinct,
+NULL for other types of constraints.
+</td></tr>
+<tr><td>INDEX_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>INDEX_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the index.
+</td></tr>
+<tr><td>INDEX_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the index.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_table_privileges">TABLE_PRIVILEGES</h3>
+<p class="notranslate">
+Contains information about privileges of tables.
+See INFORMATION_SCHEMA.CHECK_CONSTRAINTS, INFORMATION_SCHEMA.KEY_COLUMN_USAGE,
+and INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS for additional information.
+</p>
+<table class="main">
+<tbody>
+<tr><td>GRANTOR</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+NULL.
+</td></tr>
+<tr><td>GRANTEE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of grantee.
+</td></tr>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>PRIVILEGE_TYPE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;SELECT&#39;, &#39;INSERT&#39;, &#39;UPDATE&#39;, or &#39;DELETE&#39;.
+</td></tr>
+<tr><td>IS_GRANTABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether grantee may grant rights to this object to others (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>WITH_HIERARCHY</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_triggers">TRIGGERS</h3>
+<p class="notranslate">
+Contains information about triggers.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TRIGGER_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TRIGGER_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the trigger.
+</td></tr>
+<tr><td>TRIGGER_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the trigger.
+</td></tr>
+<tr><td>EVENT_MANIPULATION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;INSERT&#39;, &#39;UPDATE&#39;, &#39;DELETE&#39;, or &#39;SELECT&#39;.
+</td></tr>
+<tr><td>EVENT_OBJECT_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>EVENT_OBJECT_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>EVENT_OBJECT_TABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>ACTION_ORIENTATION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;ROW&#39; or &#39;STATEMENT&#39;.
+</td></tr>
+<tr><td>ACTION_TIMING</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;BEFORE&#39;, &#39;AFTER&#39;, or &#39;INSTEAD OF&#39;.
+</td></tr>
+<tr><td>IS_ROLLBACK</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether this trigger is executed on rollback.
+</td></tr>
+<tr><td>JAVA_CLASS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The Java class name.
+</td></tr>
+<tr><td>QUEUE_SIZE</td><td>INTEGER</td></tr><tr><td colspan="2">
+The size of the queue (is not actually used).
+</td></tr>
+<tr><td>NO_WAIT</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether trigger is defined with NO WAIT clause (is not actually used).
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_users">USERS</h3>
+<p class="notranslate">
+Contains information about users.
+Only users with ADMIN privileges can see all users, other users can see only themselves.
+</p>
+<table class="main">
+<tbody>
+<tr><td>USER_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the user.
+</td></tr>
+<tr><td>IS_ADMIN</td><td>BOOLEAN</td></tr><tr><td colspan="2">
+Whether user has ADMIN privileges.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h3 class="notranslate" id="information_schema_views">VIEWS</h3>
+<p class="notranslate">
+Contains additional information about views.
+See INFORMATION_SCHEMA.TABLES for basic information.
+</p>
+<table class="main">
+<tbody>
+<tr><td>TABLE_CATALOG</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The catalog (database name).
+</td></tr>
+<tr><td>TABLE_SCHEMA</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The schema of the table.
+</td></tr>
+<tr><td>TABLE_NAME</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The name of the table.
+</td></tr>
+<tr><td>VIEW_DEFINITION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+The query SQL, if applicable.
+</td></tr>
+<tr><td>CHECK_OPTION</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NONE&#39;.
+</td></tr>
+<tr><td>IS_UPDATABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>INSERTABLE_INTO</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;NO&#39;.
+</td></tr>
+<tr><td>IS_TRIGGER_UPDATABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether the view has INSTEAD OF trigger for UPDATE (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>IS_TRIGGER_DELETABLE</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether the view has INSTEAD OF trigger for DELETE (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>IS_TRIGGER_INSERTABLE_INTO</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Whether the view has INSTEAD OF trigger for INSERT (&#39;YES&#39; or &#39;NO&#39;).
+</td></tr>
+<tr><td>STATUS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+&#39;VALID&#39; or &#39;INVALID&#39;.
+</td></tr>
+<tr><td>REMARKS</td><td>CHARACTER VARYING</td></tr><tr><td colspan="2">
+Optional remarks.
+</td></tr>
+</tbody>
+</table>
+
+<h2 id="range_table" class="notranslate">Range Table</h2>
+<p>
+The range table is a dynamic system table that contains all values from a start to an end value.
+Non-zero step value may be also specified, default is 1.
+Start value, end value, and optional step value are converted to BIGINT data type.
+The table contains one column called X.
+If start value is greater than end value and step is positive the result is empty.
+If start value is less than end value and step is negative the result is empty too.
+If start value is equal to end value the result contains only start value.
+Start value, start value plus step, start value plus step multiplied by two and so on are included in result.
+If step is positive the last value is less than or equal to the specified end value.
+If step in negative the last value is greater than or equal to the specified end value.
+The table is used as follows:
+</p>
+<p>Examples:</p>
+<pre>
+SELECT X FROM SYSTEM_RANGE(1, 10);
+-- 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+SELECT X FROM SYSTEM_RANGE(1, 10, 2);
+-- 1, 3, 5, 7, 9
+SELECT X FROM SYSTEM_RANGE(1, 10, -1);
+-- No rows
+SELECT X FROM SYSTEM_RANGE(10, 2, -2);
+-- 10, 8, 6, 4, 2
+</pre>
+
+<!-- [close] { -->
+</div></td></tr></table>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="search.js"></script>
+<script type="text/javascript">
+function startTranslate() {
+    document.getElementById('translate').style.display='';
+    var script=document.createElement('script');
+    script.setAttribute("type","text/javascript");
+    script.setAttribute("src", "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit");
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+<!-- } --><!-- analytics --></body></html>

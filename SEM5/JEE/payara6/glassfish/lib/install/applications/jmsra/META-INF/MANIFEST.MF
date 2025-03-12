@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.9.14
+Created-By: 11.0.20+8-LTS (Azul Systems, Inc.)
+Built-By: andrew
+Specification-Title: Eclipse Open Message Queue J2EE Resource Adapater
+  for JMS
+Specification-Version: 6.3.0
+Specification-Vendor:  Eclipse Foundation
+Implementation-Title: Eclipse Open Message Queue
+Implementation-Version: 6.3.0 (Build 1-a)
+Implementation-Vendor: Eclipse Foundation
+Main-Class: com.sun.messaging.jmq.Version
+Class-Path: imqbroker.jar
+
+Name: com/sun/messaging/jms/ra
+
